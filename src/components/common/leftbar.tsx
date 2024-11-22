@@ -1,73 +1,81 @@
 import { useState } from 'react';
-import { BiPackage } from 'react-icons/bi';
-import { AiOutlineStar, AiOutlinePicture } from 'react-icons/ai';
+import { AiOutlinePicture } from 'react-icons/ai';
 import { BiLayer } from 'react-icons/bi';
-import { BsPencil } from 'react-icons/bs';
 import Product from '../functions/product';
 import LeftImages from '../functions/images';
+import NumberCount from './numbercount';
+import { FaUserCircle, FaFlag } from 'react-icons/fa';
 
-const LeftBar = () => {
+type NumberCountProps = {
+    productnumber: number;
+    setProductNumber: (num: number) => void;  // Define the type of setProductNumber function
+};
+
+const LeftBar = ({ productnumber, setProductNumber }: NumberCountProps) => {
     const [selected, setSelected] = useState('product');
-
+    const formatnumber = (num: number) => {
+        return num.toLocaleString();
+    };
     return (
-        <div>
+        <div className='fixed top-12 z-50 border-r-[1px] bg-[#3f4652] border-gray-400'>
+            <div className='h-28 border-b-[1px] border-gray-400 p-3 w-[304px]'>
+                <div className='flex justify-between mb-2'>
+                    <div className='flex flex-col'>
+                        <span className='text-white font-semibold'>レギュラーフラグ</span>
+                        <span className='text-white text-xs'>90cm x 136cm</span>
+                    </div>
+                    <div className='flex items-center px-2 bg-red-600 rounded-md h-8'>
+                        <span className='text-white text-base'>¥ {formatnumber(productnumber * 5390)}/{productnumber}枚</span>
+                    </div>
+                </div>
+                <NumberCount productnumber={productnumber} setProductNumber={setProductNumber} />
+            </div>
             <div className="flex">
-                <div className="bg-[#272c33] w-14 min-h-screen">
+                <div className="bg-[#3f4652] border-r-[1px] border-gray-400 w-20 min-h-screen">
                     <ul className="flex flex-col gap-2">
                         <li 
                             onClick={() => setSelected('product')}
                             className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
-                                group transition-colors duration-200 rounded-md
-                                ${selected === 'product' ? 'bg-[#3f4652] text-white' : 'text-gray-400'}`}
+                                group transition-colors duration-200
+                                ${selected === 'product' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
                         >
-                            <div className="mb-1 w-5 h-5 flex items-center justify-center text-gray-400 group-hover:text-[#3ead23]">
-                                <BiPackage size={18} />
+                            <div className="mb-1 w-8 h-8 flex items-center justify-center text-white group-hover:text-gray-400">
+                                <FaFlag size={32} />
                             </div>
-                            <span className='text-[9px] font-semibold group-hover:text-[#3ead23]'>Product</span>
+                            <span className='text-xs font-semibold text-white group-hover:text-gray-400'>アイテム</span>
                         </li>
                         <li 
                             onClick={() => setSelected('templates')}
                             className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
-                                group transition-colors duration-200  rounded-md
-                                ${selected === 'templates' ? 'bg-[#3f4652] text-white' : 'text-gray-400'}`}
+                                group transition-colors duration-200
+                                ${selected === 'templates' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
                         >
-                            <div className="mb-1 w-5 h-5 flex items-center justify-center text-gray-400 group-hover:text-[#3ead23]">
-                                <AiOutlineStar size={18} />
+                            <div className="mb-1 w-8 h-8 flex items-center justify-center text-white group-hover:text-gray-400">
+                                <FaUserCircle size={32}  />
                             </div>
-                            <span className='text-[9px] font-semibold group-hover:text-[#3ead23]'>Templates</span>
+                            <span className='text-xs font-semibold text-white group-hover:text-gray-400'>画像</span>
                         </li>
                         <li 
                             onClick={() => setSelected('images')}
                             className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
-                                group transition-colors duration-200  rounded-md
-                                ${selected === 'images' ? 'bg-[#3f4652] text-white' : 'text-gray-400'}`}
+                                group transition-colors duration-200
+                                ${selected === 'images' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
                         >
-                            <div className="mb-1 w-5 h-5 flex items-center justify-center text-gray-400 group-hover:text-[#3ead23]">
-                                <AiOutlinePicture size={18} />
+                            <div className="mb-1 w-8 h-8 flex items-center justify-center text-white group-hover:text-gray-400">
+                                <AiOutlinePicture size={32} />
                             </div>
-                            <span className='text-[9px] font-semibold group-hover:text-[#3ead23]'>Images</span>
+                            <span className='text-xs font-semibold text-white group-hover:text-gray-400'>フリー画像</span>
                         </li>
                         <li 
                             onClick={() => setSelected('layers')}
                             className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
-                                group transition-colors duration-200  rounded-md
-                                ${selected === 'layers' ? 'bg-[#3f4652] text-white' : 'text-gray-400'}`}
+                                group transition-colors duration-200
+                                ${selected === 'layers' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
                         >
-                            <div className="mb-1 w-5 h-5 flex items-center justify-center text-gray-400 group-hover:text-[#3ead23]">
-                                <BiLayer size={18} />
+                            <div className="mb-1 w-8 h-8 flex items-center justify-center text-white group-hover:text-gray-400">
+                                <BiLayer size={32} />
                             </div>
-                            <span className='text-[9px] font-semibold group-hover:text-[#3ead23]'>Layers</span>
-                        </li>
-                        <li 
-                            onClick={() => setSelected('drawing')}
-                            className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
-                                group transition-colors duration-200  rounded-md
-                                ${selected === 'drawing' ? 'bg-[#3f4652] text-white' : 'text-gray-400'}`}
-                        >
-                            <div className="mb-1 w-5 h-5 flex items-center justify-center text-gray-400 group-hover:text-[#3ead23]">
-                                <BsPencil size={18} />
-                            </div>
-                            <span className='text-[9px] font-semibold group-hover:text-[#3ead23]'>Drawing</span>
+                            <span className='text-xs font-semibold text-white group-hover:text-gray-400'>レイヤー</span>
                         </li>
                     </ul>
                 </div>
