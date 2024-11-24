@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { AiOutlinePicture } from 'react-icons/ai';
 import { BiLayer } from 'react-icons/bi';
 import Product from '../functions/product';
-import LeftImages from '../functions/images';
+import LeftImages from '../functions/freeimages';
 import NumberCount from './numbercount';
 import { FaUserCircle, FaFlag } from 'react-icons/fa';
+import UploadImage from '../functions/image';
 
 type NumberCountProps = {
     productnumber: number;
@@ -24,7 +25,7 @@ const LeftBar = ({ productnumber, setProductNumber }: NumberCountProps) => {
                         <span className='text-white font-semibold'>レギュラーフラグ</span>
                         <span className='text-white text-xs'>90cm x 136cm</span>
                     </div>
-                    <div className='flex items-center px-2 bg-red-600 rounded-md h-8'>
+                    <div className='flex items-center px-2 bg-[#FF0000] rounded-md h-8'>
                         <span className='text-white text-base'>¥ {formatnumber(productnumber * 5390)}/{productnumber}枚</span>
                     </div>
                 </div>
@@ -82,6 +83,9 @@ const LeftBar = ({ productnumber, setProductNumber }: NumberCountProps) => {
                 <div className='bg-[#3f4652]'>
                     {selected === 'items' && (
                         <Product />
+                    )}
+                    {selected === 'images' && (
+                        <UploadImage />
                     )}
                     {selected === 'freeimages' && (
                         <LeftImages />
