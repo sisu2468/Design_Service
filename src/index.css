@@ -2,3 +2,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* index.css or styles.css */
+@layer utilities {
+    .mask-image {
+      -webkit-mask-image: url('/public/red-panda.jpg'); /* Replace with the path to the flag image */
+      mask-image: url('/public/flag.png');
+      mask-size: cover;
+      -webkit-mask-size: cover;
+    }
+  }
+  
