@@ -10,10 +10,11 @@ import UploadImage from '../functions/image';
 type NumberCountProps = {
     productnumber: number;
     setProductNumber: (num: number) => void;  // Define the type of setProductNumber function
+    barname: string;
+    setBarName: (barname: string) => void;
 };
 
-const LeftBar = ({ productnumber, setProductNumber }: NumberCountProps) => {
-    const [selected, setSelected] = useState('product');
+const LeftBar = ({ productnumber, setProductNumber, barname, setBarName }: NumberCountProps) => {
     const formatnumber = (num: number) => {
         return num.toLocaleString();
     };
@@ -35,10 +36,10 @@ const LeftBar = ({ productnumber, setProductNumber }: NumberCountProps) => {
                 <div className="bg-[#3f4652] border-r-[1px] border-gray-400 w-20 min-h-screen">
                     <ul className="flex flex-col gap-2">
                         <li 
-                            onClick={() => setSelected('items')}
+                            onClick={() => setBarName('items')}
                             className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
                                 group transition-colors duration-200
-                                ${selected === 'items' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
+                                ${barname === 'items' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
                         >
                             <div className="mb-1 w-8 h-8 flex items-center justify-center text-white group-hover:text-gray-400">
                                 <FaFlag size={32} />
@@ -46,10 +47,10 @@ const LeftBar = ({ productnumber, setProductNumber }: NumberCountProps) => {
                             <span className='text-xs font-semibold text-white group-hover:text-gray-400'>アイテム</span>
                         </li>
                         <li 
-                            onClick={() => setSelected('images')}
+                            onClick={() => setBarName('images')}
                             className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
                                 group transition-colors duration-200
-                                ${selected === 'images' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
+                                ${barname === 'images' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
                         >
                             <div className="mb-1 w-8 h-8 flex items-center justify-center text-white group-hover:text-gray-400">
                                 <FaUserCircle size={32}  />
@@ -57,10 +58,10 @@ const LeftBar = ({ productnumber, setProductNumber }: NumberCountProps) => {
                             <span className='text-xs font-semibold text-white group-hover:text-gray-400'>画像</span>
                         </li>
                         <li 
-                            onClick={() => setSelected('freeimages')}
+                            onClick={() => setBarName('freeimages')}
                             className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
                                 group transition-colors duration-200
-                                ${selected === 'freeimages' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
+                                ${barname === 'freeimages' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
                         >
                             <div className="mb-1 w-8 h-8 flex items-center justify-center text-white group-hover:text-gray-400">
                                 <AiOutlinePicture size={32} />
@@ -68,10 +69,10 @@ const LeftBar = ({ productnumber, setProductNumber }: NumberCountProps) => {
                             <span className='text-xs font-semibold text-white group-hover:text-gray-400'>フリー画像</span>
                         </li>
                         <li 
-                            onClick={() => setSelected('layers')}
+                            onClick={() => setBarName('layers')}
                             className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
                                 group transition-colors duration-200
-                                ${selected === 'layers' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
+                                ${barname === 'layers' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
                         >
                             <div className="mb-1 w-8 h-8 flex items-center justify-center text-white group-hover:text-gray-400">
                                 <BiLayer size={32} />
@@ -81,13 +82,13 @@ const LeftBar = ({ productnumber, setProductNumber }: NumberCountProps) => {
                     </ul>
                 </div>
                 <div className='bg-[#3f4652]'>
-                    {selected === 'items' && (
+                    {barname === 'items' && (
                         <Product />
                     )}
-                    {selected === 'images' && (
+                    {barname === 'images' && (
                         <UploadImage />
                     )}
-                    {selected === 'freeimages' && (
+                    {barname === 'freeimages' && (
                         <LeftImages />
                     )}
                 </div>
