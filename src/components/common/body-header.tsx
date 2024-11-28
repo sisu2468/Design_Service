@@ -1,5 +1,6 @@
 import { TfiPencil } from "react-icons/tfi";
 import { RiCropLine } from "react-icons/ri";
+import { useState } from "react";
 
 type NumberCountProps = {
     productnumber: number;
@@ -8,7 +9,7 @@ type NumberCountProps = {
 };
 
 export default function BodyHeader({ productnumber, barstatus }: NumberCountProps) {
-
+    const [bracket, setBracket] = useState(false);
     const formatNumber = (num: number) => {
         return num.toLocaleString();
     };
@@ -39,13 +40,13 @@ export default function BodyHeader({ productnumber, barstatus }: NumberCountProp
                         />
                         {productnumber > 0 && (
                             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-                                {productnumber}
+                                {bracket ? productnumber : 0}
                             </span>
                         )}
                     </div>
                 </div>
                 <div className="flex gap-2">
-                    <button className="p-2 bg-gray-100 rounded">
+                    <button className="p-2 bg-gray-100 rounded" onClick={() => setBracket(true)}>
                         <p className="text-xs font-medium text-black">カートに追加</p>
                     </button>
                     <button className="p-2 bg-gray-100 rounded">
