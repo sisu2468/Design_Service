@@ -6,13 +6,11 @@ const FreeImages = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState(""); // Default search term
-    const [isSearchActive, setIsSearchActive] = useState(false);
 
     useEffect(() => {
         const fetchImages = async () => {
             try {
                 setLoading(true);
-                setIsSearchActive(true);
                 const response = await fetch(
                     `https://pixabay.com/api/?key=47233717-bdc36cadff11da7fe84651a16&q=${searchQuery}&totalHits=500`
                 );
@@ -27,7 +25,6 @@ const FreeImages = () => {
                 setError("Failed to fetch images");
             } finally {
                 setLoading(false);
-                setIsSearchActive(false);
             }
         };
 
