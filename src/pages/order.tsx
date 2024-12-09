@@ -87,7 +87,7 @@ export default function OrderForm() {
                                     />
                                     <span className="text-sm font-bold">発送先情報</span>
                                 </label>
-                                <p className="text-xs mt-1">送先が購入者と同じ場合は、チェックを入れたままにしてください</p>
+                                <p className="text-xs mt-1">発送先が購入者と同じ場合は、チェックを入れたままにしてください</p>
                             </div>
                         </div>
                     </div>
@@ -126,7 +126,7 @@ export default function OrderForm() {
                             <div className="space-y-4 text-sm">
                                 <h3 className="font-bold">注意事項</h3>
                                 <p className="flex items-center flex-wrap text-sm">
-                                    ※制作後は、お支払いのデータ後、弊社がフラッグのデザインデータを受領し、注文様のまたデザインに回答を頂いた日から2ヶ月有効です。
+                                    ※納期は、お支払い完了後、弊社がフラッグのデザインデータを受領し、お客様が注文デザインに同意を頂いた日から2ヶ月後です。
                                     <label className="inline-flex items-center cursor-pointer">
                                         <input
                                             type="checkbox"
@@ -135,10 +135,10 @@ export default function OrderForm() {
                                             className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out mr-1"
                                         />
                                     </label>
-                                    確認しました
+                                    理解しました
                                 </p>
                                 <p className="flex items-center flex-wrap text-sm">
-                                    ※印刷工程の性質上と、若干文字抜けズレ（1cm 未満）や若干の印刷ムラが発生することがございますことをご了承ください。
+                                    ※印刷工程の仕組み上、表裏で印刷のズレ（3cm未満）や若干の印刷ムラが発生することがございますことご了承ください。（参考画像を見る）
                                     <label className="inline-flex items-center cursor-pointer">
                                         <input
                                             type="checkbox"
@@ -147,10 +147,10 @@ export default function OrderForm() {
                                             className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out mr-1"
                                         />
                                     </label>
-                                    確認しました
+                                    理解しました
                                 </p>
                                 <p className='flex items-center flex-wrap text-sm'>
-                                    ※プレーンデジタルフラッグはデザインデルが発展しております。ご使用の環境下によっては、生地の風合や色コントなどのデザインに発生する可能性がございます。製品の品質に起因するものではありません。
+                                    ※ブレーメンデジタルフラッグはチャイナシルクを使用しております。ご使用の環境下によっては、生地の破れやほつれなどがすぐに発生する可能性がありますが、商品の品質に起因するものではありません。
                                     <label className="inline-flex items-center cursor-pointer">
                                         <input
                                             type="checkbox"
@@ -159,10 +159,10 @@ export default function OrderForm() {
                                             className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out mr-1"
                                         />
                                     </label>
-                                    確認しました
+                                    理解しました
                                 </p>
                                 <p className='flex items-center flex-wrap text-sm'>
-                                    ※国際情勢、自然災害、輸送事情、税関の規制などによる納期遅延が生じた場合の、二次的に発生する損害につきまして、弊社はその責任を一切負いません。
+                                    ※国際情勢、自然災害、輸送事故、税関の規制などによる納期遅延が生じた場合の、二次的に発生する損害につきまして、弊社はその責任を一切負いません。
                                     <label className="inline-flex items-center cursor-pointer">
                                         <input
                                             type="checkbox"
@@ -171,10 +171,10 @@ export default function OrderForm() {
                                             className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out mr-1"
                                         />
                                     </label>
-                                    確認しました
+                                    理解しました
                                 </p>
                                 <p className='flex items-center flex-wrap text-sm'>
-                                    ※カラー印刷ができが発生した場合、前日販売となるため、納期は5-6日遅れる可能性があります。弊社の判断によりご注文前に個にお伝えいたしません。時間には余裕をもってご検討くださいますよう、よろしくお願いいたします。
+                                    ※万が一印刷不良が発生した場合、再印刷手配となるため、納期がさらに遅れる可能性があります。発注の時期によっては本番に間に合わない可能性もあります。納期には余裕をもってご発注くださいますよう、よろしくお願いいたします。（納期スケジュールを確認する）
                                     <label className="inline-flex items-center cursor-pointer">
                                         <input
                                             type="checkbox"
@@ -183,14 +183,18 @@ export default function OrderForm() {
                                             className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out mr-1"
                                         />
                                     </label>
-                                    確認しました
+                                    理解しました
                                 </p>
                             </div>
 
                             <div className="mt-8 text-left">
-                                <p className="text-sm mb-2 font-bold">ご注文確定後、販売先情報が記載されたメールが届きます。</p>
+                                <p className="text-sm mb-2 font-bold">ご注文確定後、振込先情報が記載されたメールが届きます。</p>
                                 <p className="text-sm mb-4 font-bold">ご注文内容をご確認の上、お支払い手続きをお願いいたします。</p>
-                                <button className="w-full bg-[#f15642] text-white py-3 rounded hover:bg-[#d64836] transition-colors" disabled={isButtonActive}>
+                                <button 
+                                    className={`w-full ${isButtonActive ? 'bg-[#f15642] hover:bg-[#d64836]' : 'bg-gray-400'}  text-white py-3 rounded  transition-colors`}
+                                    disabled={!isButtonActive}>
+                                    onClick={}
+                                    {/* {isButtonActive ? '注文を確定する' :} */}
                                     注文を確定する
                                 </button>
                             </div>
