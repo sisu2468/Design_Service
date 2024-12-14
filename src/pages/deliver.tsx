@@ -1,18 +1,19 @@
-import { useState } from "react";
+import { useContext, useMemo } from "react";
 import { GiShoppingCart } from "react-icons/gi";
 import BuyNumberCount from "../components/common/buynumbercount";
 import Header from "../components/common/header";
+import { MASK_IMAGES } from "../constants/constants";
+import { OrderContext } from "../provider/OrderProvider";
+import { formatNumber } from "../utils";
 
 export default function FlagBuy() {
-    const [productnumber, setProductNumber] = useState<number>(1);
-    const [flag2productnumber, setFlag2ProductNumber] = useState<number>(1);
-    const formatnumber = (num: number) => {
-        return num.toLocaleString();
-    };
+    const { goods, setGoods } = useContext(OrderContext);
+    const totalPrice = useMemo(() => goods.reduce((prev, good) => prev + MASK_IMAGES[good.index].price * good.amount, 0), [goods]);
+
     return (
         <div className="h-screen">
             <Header />
-            <div className="flex flex-col justify-center items-center relative h-full">
+            <div className="py-16 flex flex-col justify-center relative">
                 <div className="max-w-4xl mx-auto w-full">
                     <div className="flex flex-col gap-4 items-center justify-center py-5 border-[1px] border-black mb-3">
                         <span className="text-black text-4xl font-extrabold">今注文すると <span className="text-[#FF0000] text-5xl font-bold">X</span> 月<span className="text-[#FF0000] text-5xl font-bold">X</span> 日 に発送予定</span>
@@ -25,42 +26,28 @@ export default function FlagBuy() {
                         <span>量</span>
                         <span>小計</span>
                     </div>
-                    <div className="grid grid-cols-5 items-center justify-center px-10 py-5 border-[1px] border-black mb-5">
-                        {/* <img src={} className="w-36 h-32" alt="レギュラーフラッグ" /> */}
-                        <div className="flex flex-col gap-2 items-center">
-                            <span className="font-normal">レギュラーフラッグ</span>
-                            <button className="px-1.5 py-2 bg-blue-600 text-white font-semibold">デザインを編集</button>
+                    {goods.map((good, index) => (
+                        <div key={index} className="grid grid-cols-5 items-center justify-center px-10 py-5 border-[1px] border-black mb-5">
+                            <img src={good.prevImage} className="w-[128px] h-[128px] object-scale-down" alt="レギュラーフラッグ" />
+                            <div className="flex flex-col gap-2 items-center">
+                                <span className="font-normal">レギュラーフラッグ</span>
+                                <button className="px-1.5 py-2 bg-blue-600 text-white font-semibold">デザインを編集</button>
+                            </div>
+                            <div className="flex items-center justify-center">
+                                <span>¥{MASK_IMAGES[good.index].price}</span>
+                            </div>
+                            <div className="flex items-center justify-center">
+                                <BuyNumberCount productnumber={good.amount} setProductNumber={(amount) => setGoods(goods.map((good, i) => index == i ? { ...good, amount } : good))} />
+                            </div>
+                            <div className="flex items-center justify-center">
+                                <span>¥{MASK_IMAGES[good.index].price * good.amount}</span>
+                            </div>
                         </div>
-                        <div className="flex items-center justify-center">
-                            <span>¥5,930</span>
-                        </div>
-                        <div className="flex items-center justify-center">
-                            <BuyNumberCount productnumber={productnumber} setProductNumber={setProductNumber} />
-                        </div>
-                        <div className="flex items-center justify-center">
-                            <span>¥{formatnumber(5930 * productnumber)}</span>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-5 items-center justify-center px-10 py-5 border-[1px] border-black mb-9">
-                        {/* <img src={} className="w-36 h-32" alt="スイングフラッグ" /> */}
-                        <div className="flex flex-col gap-2 items-center">
-                            <span className="font-normal">スイングフラッグ</span>
-                            <button className="px-1.5 py-2 bg-blue-600 text-white font-semibold">デザインを編集</button>
-                        </div>
-                        <div className="flex items-center justify-center">
-                            <span>¥9,790</span>
-                        </div>
-                        <div className="flex items-center justify-center">
-                            <BuyNumberCount productnumber={flag2productnumber} setProductNumber={setFlag2ProductNumber} />
-                        </div>
-                        <div className="flex items-center justify-center">
-                            <span>¥{formatnumber(9790 * flag2productnumber)}</span>
-                        </div>
-                    </div>
+                    ))}
                     <div className="flex justify-between items-center">
                         <div className="flex gap-4 items-center">
                             <span className="flex items-center text-lg">合計金額</span>
-                            <span className="font-extrabold text-3xl">¥{formatnumber(9790 * flag2productnumber + 5930 * productnumber)}</span>
+                            <span className="font-extrabold text-3xl">¥{formatNumber(totalPrice)}</span>
                             <span className="flex items-center text-lg">(税込)</span>
                         </div>
                         <div className="flex gap-4 items-center">
@@ -74,9 +61,7 @@ export default function FlagBuy() {
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
     )
 }

@@ -1,18 +1,45 @@
-import { TfiPencil } from "react-icons/tfi";
+import { useContext, useMemo } from "react";
+import { FaCartShopping } from "react-icons/fa6";
 import { RiCropLine } from "react-icons/ri";
-import { useState } from "react";
+import { TfiPencil } from "react-icons/tfi";
+import { useNavigate } from "react-router-dom";
+import { MASK_IMAGES } from "../../constants/constants";
+import { CanvasContext } from "../../provider/CanvasProvider";
+import { OrderContext } from "../../provider/OrderProvider";
+import { formatNumber } from "../../utils";
 
 type NumberCountProps = {
     productnumber: number;
-    setProductNumber: (num: number) => void;  // Define the type of setProductNumber function
+    setProductNumber: (num: number) => void;
     barstatus: boolean;
 };
 
 export default function BodyHeader({ productnumber, barstatus }: NumberCountProps) {
-    const [bracket, setBracket] = useState(false);
-    const formatNumber = (num: number) => {
-        return num.toLocaleString();
-    };
+    const navigate = useNavigate();
+    const { canvasRef, maskIndex } = useContext(CanvasContext);
+    const { goods, setGoods } = useContext(OrderContext);
+    const totalPrice = useMemo(() => goods.reduce((prev, good) => prev + MASK_IMAGES[good.index].price * good.amount, 0), [goods]);
+
+    const handleAdd = async () => {
+        if (canvasRef && canvasRef.current) {
+            const canvas = canvasRef.current;
+
+            const imageURL = canvasRef.current.toDataURL('image/png');
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            if (tempCtx) {
+                const rate = Math.min(128 / canvas.width, 128 / canvas.height);
+
+                tempCanvas.width = canvas.width * rate;
+                tempCanvas.height = canvas.height * rate;
+
+                tempCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 128, 128);
+
+                const prevImageURL = tempCanvas.toDataURL('image/png');
+                setGoods([...goods, { index: maskIndex, image: imageURL, prevImage: prevImageURL, amount: productnumber }]);
+            }
+        }
+    }
 
     return (
         <div className="flex justify-between gap-3 bg-[#3f4652] w-full border-b-[1px] border-gray-400 p-2">
@@ -31,31 +58,25 @@ export default function BodyHeader({ productnumber, barstatus }: NumberCountProp
             )}
             <div className="flex justify-end gap-3">
                 <div className="flex gap-2 items-center relative">
-                    <p className="text-white text-xl font-bold">¥{formatNumber(productnumber * 5390)}</p>
-                    <div className="w-6 h-6 relative">
-                        <img
-                            src="https://designstudio.dshowcase.com/wp-content/plugins/lumise/assets/images/cart.svg"
-                            alt="Cart"
-                            className="w-full h-full"
-                        />
+                    <p className="text-white text-xl font-bold">¥{formatNumber(totalPrice)}</p>
+                    <div className="w-6 h-6 relative flex items-center">
+                        <FaCartShopping color="white" />
                         {productnumber > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-                                {bracket ? productnumber : 0}
+                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                                {goods.length}
                             </span>
                         )}
                     </div>
                 </div>
                 <div className="flex gap-2">
-                    <button className="p-2 bg-gray-100 rounded" onClick={() => setBracket(true)}>
-                        <p className="text-xs font-medium text-black">カートに追加</p>
+                    <button className="p-2 bg-gray-100 rounded">
+                        <p className="text-xs font-medium text-black" onClick={handleAdd}>カートに追加</p>
                     </button>
                     <button className="p-2 bg-gray-100 rounded">
-                        <p className="text-xs font-medium text-black">チェックアウト</p>
+                        <p className="text-xs font-medium text-black" onClick={() => navigate('/checkout')}>チェックアウト</p>
                     </button>
                 </div>
             </div>
-
         </div>
     )
 }
-

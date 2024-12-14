@@ -1,5 +1,9 @@
 import { ILayer, IPoint } from "../constants/interfaces";
 
+const formatNumber = (num: number) => {
+    return num.toLocaleString();
+};
+
 export class Icon {
     private image: HTMLImageElement;
 
@@ -16,6 +20,7 @@ export class Icon {
 
 const loadImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();
+    image.crossOrigin = 'anonymous';
     image.onload = () => resolve(image);
     image.onerror = (err) => reject(err);
     image.src = src;
@@ -62,15 +67,67 @@ const isInBox = (lt: IPoint, size: number, point: IPoint) => {
     return point.x >= lt.x - size / 2 && point.x <= lt.x + size / 2 && point.y >= lt.y - size / 2 && point.y <= lt.y + size / 2;
 }
 
+const calculateInverseMatrix = (matrix: number[][]) => {
+    const [a, b, c] = matrix[0];
+    const [d, e, f] = matrix[1];
+    const [g, h, i] = matrix[2];
+
+    const determinant = a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g);
+
+    const inverseMatrix = [
+        [
+            (e * i - f * h) / determinant,
+            (c * h - b * i) / determinant,
+            (b * f - c * e) / determinant
+        ],
+        [
+            (f * g - d * i) / determinant,
+            (a * i - c * g) / determinant,
+            (c * d - a * f) / determinant
+        ],
+        [
+            (d * h - e * g) / determinant,
+            (b * g - a * h) / determinant,
+            (a * e - b * d) / determinant
+        ]
+    ];
+
+    return inverseMatrix;
+}
+
+const getTransformMatrix = (position: IPoint, scale: IPoint, rotation: number) => {
+    const cos = Math.cos(rotation);
+    const sin = Math.sin(rotation);
+    return [
+        [scale.x * cos, -sin, position.x],
+        [sin, scale.y * cos, position.y],
+        [0, 0, 1],
+    ]
+}
+
+const multiplyMatrixByVector = (matrix: number[][], vector: number[]) => {
+    const result: number[] = new Array(3).fill(0);
+
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            result[i] += matrix[i][j] * vector[j];
+        }
+    }
+
+    return result;
+}
+
 const calculateRotationAngle = (center: IPoint, topRight: IPoint, p: IPoint) => {
     const p1 = { x: topRight.x - center.x, y: topRight.y - center.y };
     const p2 = { x: p.x - center.x, y: p.y - center.y };
     return Math.atan2(p2.y, p2.x) - Math.atan2(p1.y, p1.x);
 }
 
-const calculateScale = (center: IPoint, bottomRight: IPoint, p: IPoint) => {
-    const p2 = { x: p.x - center.x, y: p.y - center.y };
-    return { x: p2.x / bottomRight.x, y: p2.y / bottomRight.y };
+const calculateScale = (matrix: number[][], width: number, height: number, p: IPoint) => {
+    const inverseMatrix = calculateInverseMatrix(matrix);
+    const p2 = multiplyMatrixByVector(inverseMatrix, [p.x, p.y, 1]);
+    return { x: p2[0] / (width / 2), y: p2[1] / (height / 2) };
 }
 
-export { calculateRotationAngle, calculateScale, getLayerTransformedPoints, getTransformedPoint, isContain, isInBox, isLeft, loadImage };
+export { calculateRotationAngle, calculateScale, formatNumber, getLayerTransformedPoints, getTransformedPoint, getTransformMatrix, isContain, isInBox, isLeft, loadImage };
+

@@ -1,19 +1,16 @@
 import clsx from "clsx";
 import _ from "lodash";
 import { FC, MouseEvent, useContext, useEffect, useRef, useState } from "react";
+import { MASK_IMAGES } from "../constants/constants";
 import { HitTestCode } from "../constants/enums";
 import { ILayer, IPoint } from "../constants/interfaces";
 import { CanvasContext } from "../provider/CanvasProvider";
-import { calculateRotationAngle, calculateScale, getLayerTransformedPoints, Icon, isContain, isInBox, loadImage } from "../utils";
+import { calculateRotationAngle, calculateScale, getLayerTransformedPoints, getTransformMatrix, Icon, isContain, isInBox, loadImage } from "../utils";
 
-interface Props {
-    mask: string;
-}
-
-const Canvas: FC<Props> = ({ mask }) => {
+const Canvas: FC = () => {
+    const { canvasRef, maskIndex, layers, setLayers, addLayer, selectedLayerId, setSelectedLayerId, zoom } = useContext(CanvasContext);
     const animationRef = useRef(0);
     const guideAnimationRef = useRef(0);
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const guideCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const maskRef = useRef<HTMLImageElement>();
     const [width, setWidth] = useState(0);
@@ -22,7 +19,6 @@ const Canvas: FC<Props> = ({ mask }) => {
     const rotateIconRef = useRef(new Icon('/icons/rotate-right.png'));
     const scaleIconRef = useRef(new Icon('/icons/scale.png'));
     const cloneIconRef = useRef(new Icon('/icons/duplicate.png'));
-    const { layers, selectedLayerId, setSelectedLayerId, zoom } = useContext(CanvasContext);
     const layersRef = useRef<ILayer[]>([]);
     const selectedLayerRef = useRef<ILayer | null>();
     const selectedLayerIdRef = useRef<string | null>();
@@ -40,7 +36,7 @@ const Canvas: FC<Props> = ({ mask }) => {
 
     const render = () => {
         try {
-            const canvas = canvasRef.current;
+            const canvas = canvasRef?.current;
             const ctx = canvas?.getContext('2d');
             if (canvas && ctx) {
                 const width = canvas.width;
@@ -91,7 +87,7 @@ const Canvas: FC<Props> = ({ mask }) => {
                 ctx.clearRect(0, 0, width, height);
 
                 layersRef.current.forEach(layer => {
-                    if (!layer.visible)
+                    if (!layer.visible || layer.locked)
                         return;
                     if (layer.id == selectedLayerIdRef.current) {
                         const points = getLayerTransformedPoints(layer).map(({ x, y }) => ({ x: x * zoomRef.current, y: y * zoomRef.current }));
@@ -132,11 +128,11 @@ const Canvas: FC<Props> = ({ mask }) => {
 
     useEffect(() => {
         (async () => {
-            maskRef.current = await loadImage(mask);
+            maskRef.current = await loadImage(MASK_IMAGES[maskIndex].mask);
             setWidth(maskRef.current.width);
             setHeight(maskRef.current.height);
         })();
-    }, [mask]);
+    }, [maskIndex]);
 
     useEffect(() => {
         layersRef.current = layers;
@@ -144,7 +140,7 @@ const Canvas: FC<Props> = ({ mask }) => {
 
     useEffect(() => {
         selectedLayerIdRef.current = selectedLayerId;
-        selectedLayerRef.current = _.cloneDeep(_.find(layersRef.current, (layer) => layer.id == selectedLayerIdRef.current));
+        selectedLayerRef.current = _.cloneDeep(layers.find((layer) => layer.id == selectedLayerId));
     }, [selectedLayerId]);
 
     useEffect(() => {
@@ -155,8 +151,10 @@ const Canvas: FC<Props> = ({ mask }) => {
         let layer = null;
         let code = HitTestCode.None;
         for (let i = 0; i < layers.length; i++) {
+            if (!layers[i].visible || layers[i].locked)
+                continue;
             const points = getLayerTransformedPoints(layers[i]);
-            if (selectedLayerIdRef.current == layers[i].id) {
+            if (selectedLayerId == layers[i].id) {
                 if (isInBox(points[0], 24 / zoomRef.current, { x, y })) {
                     code = HitTestCode.TopLeft;
                 }
@@ -178,8 +176,8 @@ const Canvas: FC<Props> = ({ mask }) => {
     }
 
     const handleMouseMove = (e: MouseEvent<HTMLCanvasElement>) => {
-        let x = e.clientX - canvasRef.current!.getBoundingClientRect().left;
-        let y = e.clientY - canvasRef.current!.getBoundingClientRect().top;
+        let x = e.clientX - canvasRef!.current!.getBoundingClientRect().left;
+        let y = e.clientY - canvasRef!.current!.getBoundingClientRect().top;
         x /= zoomRef.current;
         y /= zoomRef.current;
         currPos.current = { x, y };
@@ -189,25 +187,28 @@ const Canvas: FC<Props> = ({ mask }) => {
         setIsScalable(code == HitTestCode.BottomRight);
         setIsClosable(code == HitTestCode.TopLeft);
         setIsClonable(code == HitTestCode.BottomLeft);
-        layersRef.current?.forEach(layer => {
-            if (layer.id == selectedLayerIdRef.current) {
+        layers.forEach(layer => {
+            if (layer.id == selectedLayerId) {
                 if (selectedLayerRef.current && currPos.current) {
                     const points = getLayerTransformedPoints(selectedLayerRef.current);
-                    if (layer.id == selectedLayerIdRef.current) {
-                        const center = { x: (points[0].x + points[2].x) / 2, y: (points[0].y + points[2].y) / 2 };
-                        if (isDragging.current) {
-                            layer.position.x = center.x + currPos.current!.x - startPos.current!.x;
-                            layer.position.y = center.y + currPos.current!.y - startPos.current!.y;
-                        }
-                        if (isRotating.current) {
-                            const rotation = calculateRotationAngle(center, points[1], currPos.current);
-                            layer.rotation = rotation;
-                        }
-                        if (isScaling.current) {
-                            const { x, y } = calculateScale(center, { x: layer.width / 2, y: layer.height / 2 }, currPos.current);
-                            layer.scale.x = x;
-                            layer.scale.y = y;
-                        }
+                    const center = { x: (points[0].x + points[2].x) / 2, y: (points[0].y + points[2].y) / 2 };
+                    if (isDragging.current) {
+                        layer.position.x = center.x + currPos.current!.x - startPos.current!.x;
+                        layer.position.y = center.y + currPos.current!.y - startPos.current!.y;
+                    }
+                    if (isRotating.current) {
+                        const rotation = calculateRotationAngle(center, points[1], currPos.current);
+                        layer.rotation = selectedLayerRef.current.rotation + rotation;
+                    }
+                    if (isScaling.current) {
+                        const matrix = getTransformMatrix(
+                            selectedLayerRef.current.position,
+                            { x: 1, y: 1 },
+                            selectedLayerRef.current.rotation,
+                        );
+                        const { x, y } = calculateScale(matrix, layer.width, layer.height, currPos.current);
+                        layer.scale.x = x;
+                        layer.scale.y = y;
                     }
                 }
             }
@@ -215,8 +216,8 @@ const Canvas: FC<Props> = ({ mask }) => {
     }
 
     const handleMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
-        let x = e.clientX - canvasRef.current!.getBoundingClientRect().left;
-        let y = e.clientY - canvasRef.current!.getBoundingClientRect().top;
+        let x = e.clientX - canvasRef!.current!.getBoundingClientRect().left;
+        let y = e.clientY - canvasRef!.current!.getBoundingClientRect().top;
         x /= zoomRef.current;
         y /= zoomRef.current;
         startPos.current = { x, y };
@@ -227,9 +228,12 @@ const Canvas: FC<Props> = ({ mask }) => {
         } else if (code == HitTestCode.BottomRight) {
             isScaling.current = true;
         } else if (code == HitTestCode.TopLeft) {
-
+            setLayers(layers.filter(layer => layer.id != selectedLayerId));
         } else if (code == HitTestCode.BottomLeft) {
-
+            const layer = layers.find(layer => layer.id == selectedLayerId);
+            if (layer) {
+                addLayer(layer.src, layer.position, layer.scale, layer.rotation);
+            }
         } else if (layer) {
             setSelectedLayerId(layer.id);
             isDragging.current = true;
@@ -240,7 +244,7 @@ const Canvas: FC<Props> = ({ mask }) => {
         isDragging.current = false;
         isScaling.current = false;
         isRotating.current = false;
-        selectedLayerRef.current = _.cloneDeep(_.find(layersRef.current, (layer) => layer.id == selectedLayerIdRef.current));
+        selectedLayerRef.current = _.cloneDeep(layers.find((layer) => layer.id == selectedLayerId));
     }
 
     return (
@@ -255,9 +259,9 @@ const Canvas: FC<Props> = ({ mask }) => {
                 className={clsx(
                     "absolute left-0 top-0",
                     (isClosable || isClonable) ? 'cursor-pointer'
-                        : isRotatable ? 'cursor-crosshair'
-                            : isScalable ? 'cursor-nwse-resize'
-                                : isDraggable ? 'cursor-move' : 'cursor-default'
+                        : (isRotatable || isRotating.current) ? 'cursor-crosshair'
+                            : (isScalable || isScaling.current) ? 'cursor-nwse-resize'
+                                : (isDraggable || isDragging.current) ? 'cursor-move' : 'cursor-default'
                 )}
                 width={Math.floor(width * zoom)} height={Math.floor(height * zoom)}
                 onMouseMove={handleMouseMove}

@@ -17,3 +17,10 @@ export interface ILayer {
     visible: boolean;
     locked: boolean;
 }
+
+export interface IGood {
+    index: number;
+    image: string;
+    prevImage: string;
+    amount: number;
+}

@@ -14,7 +14,8 @@ const Layer: FC<{
     handleToggleLock: (id: string, locked: boolean) => void;
     handleDelete: (id: string) => void;
     handleSelect: (id: string) => void;
-}> = ({ layerInfo, index, onDragStart, onDrop, isDragging, handleToggleVisible, handleToggleLock, handleDelete, handleSelect }) => {
+    handleNameChange: (id: string, name: string) => void;
+}> = ({ layerInfo, index, onDragStart, onDrop, isDragging, handleToggleVisible, handleToggleLock, handleDelete, handleSelect, handleNameChange }) => {
     const { selectedLayerId } = useContext(CanvasContext);
 
     return (
@@ -30,9 +31,7 @@ const Layer: FC<{
             onDrop={() => onDrop(index)}
             onClick={() => handleSelect(layerInfo.id)}
         >
-            <p className="text-white">
-                {layerInfo.name}
-            </p>
+            <input className="max-w-[120px] bg-[#0000] text-white outline-none" value={layerInfo.name} onChange={e => handleNameChange(layerInfo.id, e.target.value)} />
             <div className="flex gap-2">
                 {layerInfo.visible ? (
                     <FaEye size={12} color="white" onClick={() => handleToggleVisible(layerInfo.id, false)} />
@@ -84,6 +83,7 @@ const Layers = () => {
                     handleToggleLock={(id, locked) => setLayers(layers.map((layer) => layer.id == id ? { ...layer, locked } : layer))}
                     handleDelete={(id) => setLayers(layers.filter(layer => layer.id != id))}
                     handleSelect={(id) => setSelectedLayerId(id)}
+                    handleNameChange={(id, name) => setLayers(layers.map((layer) => layer.id == id ? { ...layer, name } : layer))}
                 />
             ))}
         </div>
