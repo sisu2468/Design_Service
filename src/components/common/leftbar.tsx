@@ -17,6 +17,7 @@ type NumberCountProps = {
 };
 
 const LeftBar = ({ productnumber, setProductNumber, barname, setBarName }: NumberCountProps) => {
+
     const { maskIndex } = useContext(CanvasContext);
 
     return (
