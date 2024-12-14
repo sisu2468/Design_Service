@@ -12,14 +12,7 @@ export default function OrderForm() {
     useEffect(() => {
         setIsButtonActive(confirm1 && confirm2 && confirm3);
     }, [confirm1, confirm2, confirm3, confirm4, confirm5]);
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (isButtonActive) {
-            // Handle order submission here
-            console.log('Order submitted');
-        }
-    };
+    
     return (
         <div className="max-w-6xl mx-auto p-8">
             <div className="border border-gray-300 rounded-sm p-6">
