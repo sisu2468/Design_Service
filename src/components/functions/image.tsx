@@ -14,7 +14,9 @@ const UploadImage = () => {
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
-        accept: "image/*",
+        accept: {
+            'image/*': []
+        },
         multiple: false,
     });
 
