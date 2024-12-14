@@ -6,6 +6,8 @@ import UploadImage from '../functions/image';
 import Layers from '../functions/Layers';
 import Product from '../functions/product';
 import NumberCount from './numbercount';
+import { useContext } from 'react';
+import { CanvasContext } from '../../provider/CanvasProvider';
 
 type NumberCountProps = {
     productnumber: number;
@@ -15,19 +17,18 @@ type NumberCountProps = {
 };
 
 const LeftBar = ({ productnumber, setProductNumber, barname, setBarName }: NumberCountProps) => {
-    const formatnumber = (num: number) => {
-        return num.toLocaleString();
-    };
+    const { maskIndex } = useContext(CanvasContext);
+
     return (
         <div className='w-[320px] flex flex-col bg-[#3f4652] border-r border-gray-400'>
             <div className='h-28 border-b border-gray-400 p-3'>
                 <div className='flex justify-between mb-2'>
                     <div className='flex flex-col'>
-                        <span className='text-white font-semibold'>レギュラーフラグ</span>
+                        <span className='text-white font-semibold'>{maskIndex == 0 ? 'レギュラーフラグ' : 'スイングフラッグ'}</span>
                         <span className='text-white text-xs'>90cm x 136cm</span>
                     </div>
                     <div className='flex items-center px-2 bg-[#FF0000] rounded-md h-8'>
-                        <span className='text-white text-base'>¥ {formatnumber(5390)}/{1}枚</span>
+                        <span className='text-white text-base'>¥ {maskIndex == 0 ? '5,390' : '9,790'}/{1}枚</span>
                     </div>
                 </div>
                 <NumberCount productnumber={productnumber} setProductNumber={setProductNumber} />
