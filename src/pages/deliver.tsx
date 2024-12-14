@@ -5,6 +5,7 @@ import Header from "../components/common/header";
 import { MASK_IMAGES } from "../constants/constants";
 import { OrderContext } from "../provider/OrderProvider";
 import { formatNumber } from "../utils";
+import { IoIosClose } from "react-icons/io";
 
 export default function FlagBuy() {
     const { goods, setGoods } = useContext(OrderContext);
@@ -27,8 +28,15 @@ export default function FlagBuy() {
                         <span>小計</span>
                     </div>
                     {goods.map((good, index) => (
-                        <div key={index} className="grid grid-cols-5 items-center justify-center px-10 py-5 border-[1px] border-black mb-5">
-                            <img src={good.prevImage} className="w-[128px] h-[128px] object-scale-down" alt="レギュラーフラッグ" />
+                        <div key={index} className="relative grid grid-cols-5 items-center justify-center px-10 py-5 border-[1px] border-black mb-5">
+                            <div className="cursor-pointer ">
+                                <img src={good.prevImage} className="w-[128px] h-[128px] object-scale-down" alt="レギュラーフラッグ" />
+                                <IoIosClose
+                                    size={20}
+                                    className="absolute top-4 right-4 text-red-600 cursor-pointer"
+                                    onClick={() => setGoods(goods.filter((_, i) => i !== index))} // Remove the selected item
+                                />
+                            </div>
                             <div className="flex flex-col gap-2 items-center">
                                 <span className="font-normal">レギュラーフラッグ</span>
                                 <button className="px-1.5 py-2 bg-blue-600 text-white font-semibold">デザインを編集</button>

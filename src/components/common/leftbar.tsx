@@ -27,7 +27,7 @@ const LeftBar = ({ productnumber, setProductNumber, barname, setBarName }: Numbe
                         <span className='text-white text-xs'>90cm x 136cm</span>
                     </div>
                     <div className='flex items-center px-2 bg-[#FF0000] rounded-md h-8'>
-                        <span className='text-white text-base'>¥ {formatnumber(productnumber * 5390)}/{productnumber}枚</span>
+                        <span className='text-white text-base'>¥ {formatnumber(5390)}/{1}枚</span>
                     </div>
                 </div>
                 <NumberCount productnumber={productnumber} setProductNumber={setProductNumber} />
