@@ -17,7 +17,7 @@ export default function FlagBuy() {
                 <div className="max-w-4xl mx-auto w-full">
                     <div className="flex flex-col gap-4 items-center justify-center py-5 border-[1px] border-black mb-3">
                         <span className="text-black text-4xl font-extrabold">今注文すると <span className="text-[#FF0000] text-5xl font-bold">X</span> 月<span className="text-[#FF0000] text-5xl font-bold">X</span> 日 に発送予定</span>
-                        <span className="text-black font-medium text-base">お届け予定日 (納期)の目安は、<a href="/delivery"><span className="text-blue-600">こちらのページ</span></a>をご確認ください。</span>
+                        <span className="text-black font-medium text-base">お届け予定日 (納期)の目安は、<a href="/order"><span className="text-blue-600">こちらのページ</span></a>をご確認ください。</span>
                     </div>
                     <div className="grid grid-cols-5 items-center text-center px-10">
                         <div className="w-36"></div>
@@ -51,9 +51,11 @@ export default function FlagBuy() {
                             <span className="flex items-center text-lg">(税込)</span>
                         </div>
                         <div className="flex gap-4 items-center">
-                            <button className="bg-blue-800 p-2.5 text-white font-semibold">
-                                新しいフラッグを作成
-                            </button>
+                            <a href="/">
+                                <button className="bg-blue-800 p-2.5 text-white font-semibold">
+                                    新しいフラッグを作成
+                                </button>
+                            </a>
                             <button className="bg-orange-500 p-2.5 text-white font-semibold flex gap-3">
                                 <GiShoppingCart size={22} />
                                 チェックアウト

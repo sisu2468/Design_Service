@@ -10,9 +10,9 @@ export default function OrderForm() {
     const [isButtonActive, setIsButtonActive] = useState(false);
 
     useEffect(() => {
-        setIsButtonActive(confirm1 && confirm2 && confirm3);
+        setIsButtonActive(confirm1 && confirm2 && confirm3 && confirm4 && confirm5);
     }, [confirm1, confirm2, confirm3, confirm4, confirm5]);
-    
+
     return (
         <div className="max-w-6xl mx-auto p-8">
             <div className="border border-gray-300 rounded-sm p-6">
@@ -186,7 +186,7 @@ export default function OrderForm() {
                                 <button 
                                     className={`w-full ${isButtonActive ? 'bg-[#f15642] hover:bg-[#d64836]' : 'bg-gray-400'}  text-white py-3 rounded  transition-colors`}
                                     disabled={!isButtonActive}>
-                                    onClick={}
+                                    {/* onClick={} */}
                                     {/* {isButtonActive ? '注文を確定する' :} */}
                                     注文を確定する
                                 </button>
