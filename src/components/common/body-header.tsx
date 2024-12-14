@@ -15,7 +15,7 @@ export default function BodyHeader({ productnumber, barstatus }: NumberCountProp
     };
 
     return (
-        <div className="flex mt-12 justify-between gap-3 bg-[#3f4652] w-full border-b-[1px] border-gray-400 p-2">
+        <div className="flex justify-between gap-3 bg-[#3f4652] w-full border-b-[1px] border-gray-400 p-2">
             {barstatus ? (
                 <div className="pl-80 gap-2 flex justify-between items-center">
                     <div className="p-1.5 bg-gray-200 cursor-pointer">

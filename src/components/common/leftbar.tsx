@@ -1,10 +1,11 @@
 import { AiOutlinePicture } from 'react-icons/ai';
 import { BiLayer } from 'react-icons/bi';
-import Product from '../functions/product';
+import { FaFlag, FaUserCircle } from 'react-icons/fa';
 import LeftImages from '../functions/freeimages';
-import NumberCount from './numbercount';
-import { FaUserCircle, FaFlag } from 'react-icons/fa';
 import UploadImage from '../functions/image';
+import Layers from '../functions/Layers';
+import Product from '../functions/product';
+import NumberCount from './numbercount';
 
 type NumberCountProps = {
     productnumber: number;
@@ -18,8 +19,8 @@ const LeftBar = ({ productnumber, setProductNumber, barname, setBarName }: Numbe
         return num.toLocaleString();
     };
     return (
-        <div className='fixed top-12 z-50 border-r-[1px] bg-[#3f4652] border-gray-400'>
-            <div className='h-28 border-b-[1px] border-gray-400 p-3 w-[304px]'>
+        <div className='w-[320px] flex flex-col bg-[#3f4652] border-r border-gray-400'>
+            <div className='h-28 border-b border-gray-400 p-3'>
                 <div className='flex justify-between mb-2'>
                     <div className='flex flex-col'>
                         <span className='text-white font-semibold'>レギュラーフラグ</span>
@@ -31,10 +32,10 @@ const LeftBar = ({ productnumber, setProductNumber, barname, setBarName }: Numbe
                 </div>
                 <NumberCount productnumber={productnumber} setProductNumber={setProductNumber} />
             </div>
-            <div className="flex">
-                <div className="bg-[#3f4652] border-r-[1px] border-gray-400 w-20 min-h-screen">
+            <div className="flex-grow flex">
+                <div className="bg-[#3f4652] border-r border-gray-400 w-20">
                     <ul className="flex flex-col gap-2">
-                        <li 
+                        <li
                             onClick={() => setBarName('items')}
                             className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
                                 group transition-colors duration-200
@@ -45,18 +46,18 @@ const LeftBar = ({ productnumber, setProductNumber, barname, setBarName }: Numbe
                             </div>
                             <span className='text-xs font-semibold text-white group-hover:text-gray-400'>アイテム</span>
                         </li>
-                        <li 
+                        <li
                             onClick={() => setBarName('images')}
                             className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
                                 group transition-colors duration-200
                                 ${barname === 'images' ? 'bg-gray-500 text-white' : 'text-gray-400'}`}
                         >
                             <div className="mb-1 w-8 h-8 flex items-center justify-center text-white group-hover:text-gray-400">
-                                <FaUserCircle size={32}  />
+                                <FaUserCircle size={32} />
                             </div>
                             <span className='text-xs font-semibold text-white group-hover:text-gray-400'>画像</span>
                         </li>
-                        <li 
+                        <li
                             onClick={() => setBarName('freeimages')}
                             className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
                                 group transition-colors duration-200
@@ -67,7 +68,7 @@ const LeftBar = ({ productnumber, setProductNumber, barname, setBarName }: Numbe
                             </div>
                             <span className='text-xs font-semibold text-white group-hover:text-gray-400'>フリー画像</span>
                         </li>
-                        <li 
+                        <li
                             onClick={() => setBarName('layers')}
                             className={`text-xs uppercase flex flex-col items-center p-2 cursor-pointer
                                 group transition-colors duration-200
@@ -80,7 +81,7 @@ const LeftBar = ({ productnumber, setProductNumber, barname, setBarName }: Numbe
                         </li>
                     </ul>
                 </div>
-                <div className='bg-[#3f4652]'>
+                <div className='flex-grow bg-[#3f4652]'>
                     {barname === 'items' && (
                         <Product />
                     )}
@@ -89,6 +90,9 @@ const LeftBar = ({ productnumber, setProductNumber, barname, setBarName }: Numbe
                     )}
                     {barname === 'freeimages' && (
                         <LeftImages />
+                    )}
+                    {barname === 'layers' && (
+                        <Layers />
                     )}
                 </div>
             </div>

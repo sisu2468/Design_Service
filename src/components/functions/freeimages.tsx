@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
-import { FaSpinner, FaSearch } from 'react-icons/fa'; // Importing a spinner and search icon
+import { useContext, useEffect, useState } from "react";
+import { FaSearch, FaSpinner } from 'react-icons/fa'; // Importing a spinner and search icon
+import { CanvasContext } from "../../provider/CanvasProvider";
 
 const FreeImages = () => {
+    const { addLayer } = useContext(CanvasContext);
     const [pixabayImages, setPixabayImages] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -78,7 +80,9 @@ const FreeImages = () => {
             {/* Image Grid with scrolling */}
             <div className="grid grid-cols-2 gap-2 overflow-y-auto max-h-[500px]"> {/* Set max height for scroll */}
                 {pixabayImages.map((image: any) => (
-                    <div key={image.id} className="relative">
+                    <div key={image.id} className="relative" onClick={() => {
+                        addLayer(image.largeImageURL);
+                    }}>
                         <img
                             src={image.webformatURL}
                             alt={image.tags}

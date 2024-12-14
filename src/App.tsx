@@ -11,7 +11,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/deliver" element={<FlagDeliver />} />
           <Route path="/order" element={<OrderForm />} />
-
         </Routes>
       </Router>
     </>

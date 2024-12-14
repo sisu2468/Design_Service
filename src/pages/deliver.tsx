@@ -1,9 +1,7 @@
-import Header from "../components/common/header"
-import Flag1 from "../assets/images/レギュラーフラッグ.png"
-import Flag2 from "../assets/images/スイングフラッグ.png"
-import { useState } from "react"
-import BuyNumberCount from "../components/common/buynumbercount";
+import { useState } from "react";
 import { GiShoppingCart } from "react-icons/gi";
+import BuyNumberCount from "../components/common/buynumbercount";
+import Header from "../components/common/header";
 
 export default function FlagBuy() {
     const [productnumber, setProductNumber] = useState<number>(1);
@@ -28,7 +26,7 @@ export default function FlagBuy() {
                         <span>小計</span>
                     </div>
                     <div className="grid grid-cols-5 items-center justify-center px-10 py-5 border-[1px] border-black mb-5">
-                        <img src={Flag1} className="w-36 h-32" alt="レギュラーフラッグ" />
+                        {/* <img src={} className="w-36 h-32" alt="レギュラーフラッグ" /> */}
                         <div className="flex flex-col gap-2 items-center">
                             <span className="font-normal">レギュラーフラッグ</span>
                             <button className="px-1.5 py-2 bg-blue-600 text-white font-semibold">デザインを編集</button>
@@ -44,7 +42,7 @@ export default function FlagBuy() {
                         </div>
                     </div>
                     <div className="grid grid-cols-5 items-center justify-center px-10 py-5 border-[1px] border-black mb-9">
-                        <img src={Flag2} className="w-36 h-32" alt="スイングフラッグ" />
+                        {/* <img src={} className="w-36 h-32" alt="スイングフラッグ" /> */}
                         <div className="flex flex-col gap-2 items-center">
                             <span className="font-normal">スイングフラッグ</span>
                             <button className="px-1.5 py-2 bg-blue-600 text-white font-semibold">デザインを編集</button>
