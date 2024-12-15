@@ -14,10 +14,11 @@ const FreeImages = () => {
             try {
                 setLoading(true);
                 const response = await fetch(
-                    `https://pixabay.com/api/?key=47233717-bdc36cadff11da7fe84651a16&q=${searchQuery}&totalHits=1000`
+                    `https://pixabay.com/api/?key=47233717-bdc36cadff11da7fe84651a16&q=${searchQuery}`
                 );
                 const data = await response.json();
-
+                console.log("data", data);
+                
                 if (data.hits) {
                     setPixabayImages(data.hits);
                 } else {
