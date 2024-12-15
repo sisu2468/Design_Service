@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { CanvasContext } from '../provider/CanvasProvider';
+import { OrderContext } from '../provider/OrderProvider';
 
 export default function OrderForm() {
     const [sameAsCustomer, setSameAsCustomer] = useState(false);
@@ -8,6 +10,8 @@ export default function OrderForm() {
     const [confirm4, setConfirm4] = useState(false);
     const [confirm5, setConfirm5] = useState(false);
     const [isButtonActive, setIsButtonActive] = useState(false);
+    const { goods } = useContext(OrderContext);
+    console.log("goods", goods);
 
     useEffect(() => {
         setIsButtonActive(confirm1 && confirm2 && confirm3 && confirm4 && confirm5);
