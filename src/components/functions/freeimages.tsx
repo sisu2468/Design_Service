@@ -81,7 +81,7 @@ const FreeImages = () => {
             {/* Image Grid with scrolling */}
             <div className="grid grid-cols-2 gap-2 overflow-y-auto max-h-[500px]"> {/* Set max height for scroll */}
                 {pixabayImages.map((image: any) => (
-                    <div key={image.id} className="relative" onClick={() => {
+                    <div key={image.id} className="" onClick={() => {
                         addLayer(image.largeImageURL);
                     }}>
                         <img
