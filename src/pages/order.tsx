@@ -35,6 +35,59 @@ export default function OrderForm() {
         return sum + count;
     }, 0);
 
+    const [currentMonth, setCurrentMonth] = useState<number>(0)
+    const [currentYear, setCurrentYear] = useState<number>(0)
+    const [currentDay, setCurrentDay] = useState<number>(0)
+    const [deliverDay, setDeliverDay] = useState<string>('');
+
+    useEffect(() => {
+        const date = new Date()
+        const year = date.getFullYear() + 1 // getMonth() returns 0-11, so we add 1
+        const month = date.getMonth() + 1 // getMonth() returns 0-11, so we add 1
+        const day = date.getDay() + 1 // getMonth() returns 0-11, so we add 1
+        setCurrentMonth((month + 2) % 12)
+        if (month > 10) {
+            setCurrentYear(year + 1);
+        }
+        else setCurrentYear(year)
+        if (month == 8 || day == 9 && day <= 15) {
+            setDeliverDay('日頃');
+            setCurrentDay(15)
+        }
+        else setDeliverDay('末頃');
+    }, [])
+    const queryParams = new URLSearchParams({
+        buyername: username,
+        ordernumber: '12345',
+        emailaddress: emailaddress,
+        postalcode: postalnumber,
+        address: address,
+        telnumber: phonenumber,
+        orderdate: new Date().toISOString(),
+        products: JSON.stringify(goods), // Convert goods array to a JSON string
+        totalprice: totalPrice.toString(), // Ensure totalprice is a string
+        deliverydate: `${currentYear}年 ${currentMonth}月 ${currentDay ? currentDay + deliverDay : deliverDay }`,
+    });
+
+    // queryParams.forEach((value, key) => {
+    //     console.log(`${key}: ${value}`);
+    // });
+
+
+    const sendDeliveryData = async () => {
+        try {
+            const response = await fetch(`http://192.168.146.159:3000/deliver?${queryParams.toString()}`); // Replace `PORT` with your server port, e.g., 3000
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Response:', data);
+            } else {
+                console.error('Error:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
+    };
+
     return (
         <div className="max-w-6xl mx-auto p-8">
             <div className="border border-gray-300 rounded-sm p-6">
@@ -207,7 +260,9 @@ export default function OrderForm() {
                                 <p className="text-sm mb-4 font-bold">ご注文内容をご確認の上、お支払い手続きをお願いいたします。</p>
                                 <button
                                     className={`w-full ${isButtonActive ? 'bg-[#f15642] hover:bg-[#d64836]' : 'bg-gray-400'}  text-white py-3 rounded  transition-colors`}
-                                    disabled={!isButtonActive}>
+                                    disabled={!isButtonActive}
+                                    onClick={sendDeliveryData}
+                                >
                                     {/* onClick={} */}
                                     {/* {isButtonActive ? '注文を確定する' :} */}
                                     注文を確定する
