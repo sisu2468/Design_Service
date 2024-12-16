@@ -1,11 +1,12 @@
 import { useContext, useMemo } from "react";
 import { GiShoppingCart } from "react-icons/gi";
+import { IoIosClose } from "react-icons/io";
+import { Link } from "react-router-dom";
 import BuyNumberCount from "../components/common/buynumbercount";
 import Header from "../components/common/header";
 import { MASK_IMAGES } from "../constants/constants";
 import { OrderContext } from "../provider/OrderProvider";
 import { formatNumber } from "../utils";
-import { IoIosClose } from "react-icons/io";
 
 export default function FlagBuy() {
     const { goods, setGoods } = useContext(OrderContext);
@@ -59,17 +60,17 @@ export default function FlagBuy() {
                             <span className="flex items-center text-lg">(税込)</span>
                         </div>
                         <div className="flex gap-4 items-center">
-                            <a href="/">
+                            <Link to="/">
                                 <button className="bg-blue-800 p-2.5 text-white font-semibold">
                                     新しいフラッグを作成
                                 </button>
-                            </a>
-                            <a href="/order">
+                            </Link>
+                            <Link to="/order">
                                 <button className="bg-orange-500 p-2.5 text-white font-semibold flex gap-3">
                                     <GiShoppingCart size={22} />
                                     チェックアウト
                                 </button>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
