@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { OrderContext } from '../provider/OrderProvider';
+import { MASK_IMAGES } from '../constants/constants';
+import { formatNumber } from '../utils';
 
 export default function OrderForm() {
     const [sameAsCustomer, setSameAsCustomer] = useState(false);
@@ -8,6 +10,13 @@ export default function OrderForm() {
     const [confirm3, setConfirm3] = useState(false);
     const [confirm4, setConfirm4] = useState(false);
     const [confirm5, setConfirm5] = useState(false);
+    const [username, setUserName] = useState('');
+    const [namehuri, setNameHuri] = useState('');
+    const [companyname, setCompanyName] = useState('');
+    const [emailaddress, setEmailAddress] = useState('');
+    const [address, setAddress] = useState('');
+    const [postalnumber, setPostalNumber] = useState('');
+    const [phonenumber, setPhoneNumber] = useState('');
     const [isButtonActive, setIsButtonActive] = useState(false);
     const { goods } = useContext(OrderContext);
     console.log("goods", goods);
@@ -16,11 +25,20 @@ export default function OrderForm() {
         setIsButtonActive(confirm1 && confirm2 && confirm3 && confirm4 && confirm5);
     }, [confirm1, confirm2, confirm3, confirm4, confirm5]);
 
+    const totalPrice = goods.reduce((sum, good) => {
+        const price = MASK_IMAGES[good.index]?.price || 0;
+        return sum + price * good.amount;
+    }, 0);
+
+    const totalCount = goods.reduce((sum, good) => {
+        const count = good.amount || 0;
+        return sum + count;
+    }, 0);
+
     return (
         <div className="max-w-6xl mx-auto p-8">
             <div className="border border-gray-300 rounded-sm p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Customer Information Section */}
                     <div>
                         <h2 className="text-lg font-bold mb-6">購入者情報</h2>
                         <div className="space-y-4">
@@ -29,6 +47,7 @@ export default function OrderForm() {
                                 <input
                                     type="text"
                                     className="w-full border border-gray-300 p-2 rounded-sm"
+                                    onChange={(e) => setUserName(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -36,6 +55,7 @@ export default function OrderForm() {
                                 <input
                                     type="text"
                                     className="w-full border border-gray-300 p-2 rounded-sm"
+                                    onChange={(e) => setNameHuri(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -43,6 +63,7 @@ export default function OrderForm() {
                                 <input
                                     type="text"
                                     className="w-full border border-gray-300 p-2 rounded-sm"
+                                    onChange={(e) => setCompanyName(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -50,6 +71,7 @@ export default function OrderForm() {
                                 <input
                                     type="text"
                                     className="w-40 border border-gray-300 p-2 rounded-sm"
+                                    onChange={(e) => setPostalNumber(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -57,6 +79,7 @@ export default function OrderForm() {
                                 <input
                                     type="text"
                                     className="w-full border border-gray-300 p-2 rounded-sm"
+                                    onChange={(e) => setAddress(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -64,6 +87,7 @@ export default function OrderForm() {
                                 <input
                                     type="tel"
                                     className="w-full border border-gray-300 p-2 rounded-sm"
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -71,6 +95,7 @@ export default function OrderForm() {
                                 <input
                                     type="email"
                                     className="w-full border border-gray-300 p-2 rounded-sm"
+                                    onChange={(e) => setEmailAddress(e.target.value)}
                                 />
                             </div>
                             <div className="mt-8">
@@ -99,23 +124,17 @@ export default function OrderForm() {
                                     <div className="text-center">数量</div>
                                     <div className="text-right">小計</div>
                                 </div>
-
-                                <div className="grid grid-cols-3 text-sm mb-2 border-t border-gray-300 pt-2">
-                                    <div className='font-medium text-base'>レギュラーフラッグ</div>
-                                    <div className="text-center">x</div>
-                                    <div className="text-right">¥xxxx</div>
-                                </div>
-
-                                <div className="grid grid-cols-3 text-sm mb-2 border-t border-gray-300 pt-2">
-                                    <div className='font-medium text-base'>レギュラーフラッグ</div>
-                                    <div className="text-center">x</div>
-                                    <div className="text-right">¥xxxx</div>
-                                </div>
-
+                                {goods.map((good, index) => (
+                                    <div key={index} className="grid grid-cols-3 text-sm mb-2 border-t border-gray-300 pt-2">
+                                        <div className='font-medium text-base'>{good.flagtype}</div>
+                                        <div className="text-center">{good.amount}</div>
+                                        <div className="text-right">¥{formatNumber(MASK_IMAGES[good.index].price)}</div>
+                                    </div>
+                                ))}
                                 <div className="grid grid-cols-3 text-sm font-bold border-y border-gray-300 py-2">
                                     <div>合計</div>
-                                    <div className="text-center">x</div>
-                                    <div className="text-right">¥xxxx</div>
+                                    <div className="text-center">{totalCount}</div>
+                                    <div className="text-right">¥{formatNumber(totalPrice)}</div>
                                 </div>
                             </div>
 
@@ -186,7 +205,7 @@ export default function OrderForm() {
                             <div className="mt-8 text-left">
                                 <p className="text-sm mb-2 font-bold">ご注文確定後、振込先情報が記載されたメールが届きます。</p>
                                 <p className="text-sm mb-4 font-bold">ご注文内容をご確認の上、お支払い手続きをお願いいたします。</p>
-                                <button 
+                                <button
                                     className={`w-full ${isButtonActive ? 'bg-[#f15642] hover:bg-[#d64836]' : 'bg-gray-400'}  text-white py-3 rounded  transition-colors`}
                                     disabled={!isButtonActive}>
                                     {/* onClick={} */}
