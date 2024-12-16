@@ -11,8 +11,6 @@ export default function OrderForm() {
     const [confirm4, setConfirm4] = useState(false);
     const [confirm5, setConfirm5] = useState(false);
     const [username, setUserName] = useState('');
-    const [namehuri, setNameHuri] = useState('');
-    const [companyname, setCompanyName] = useState('');
     const [emailaddress, setEmailAddress] = useState('');
     const [address, setAddress] = useState('');
     const [postalnumber, setPostalNumber] = useState('');
@@ -108,7 +106,6 @@ export default function OrderForm() {
                                 <input
                                     type="text"
                                     className="w-full border border-gray-300 p-2 rounded-sm"
-                                    onChange={(e) => setNameHuri(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -116,7 +113,6 @@ export default function OrderForm() {
                                 <input
                                     type="text"
                                     className="w-full border border-gray-300 p-2 rounded-sm"
-                                    onChange={(e) => setCompanyName(e.target.value)}
                                 />
                             </div>
                             <div>
