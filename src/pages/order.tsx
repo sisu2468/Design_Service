@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import { CanvasContext } from '../provider/CanvasProvider';
 import { OrderContext } from '../provider/OrderProvider';
 
 export default function OrderForm() {

@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { GiShoppingCart } from "react-icons/gi";
 import BuyNumberCount from "../components/common/buynumbercount";
 import Header from "../components/common/header";
@@ -6,19 +6,37 @@ import { MASK_IMAGES } from "../constants/constants";
 import { OrderContext } from "../provider/OrderProvider";
 import { formatNumber } from "../utils";
 import { IoIosClose } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 export default function FlagBuy() {
     const { goods, setGoods } = useContext(OrderContext);
     const totalPrice = useMemo(() => goods.reduce((prev, good) => prev + MASK_IMAGES[good.index].price * good.amount, 0), [goods]);
-    console.log(goods);
-    
+    const [currentMonth, setCurrentMonth] = useState<number>(0)
+    const [currentDay, setCurrentDay] = useState<number>(0)
+    const [deliverDay, setDeliverDay] = useState<string>('');
+
+    useEffect(() => {
+        const date = new Date()
+        const month = date.getMonth() + 1 // getMonth() returns 0-11, so we add 1
+        const day = date.getDay() + 1 // getMonth() returns 0-11, so we add 1
+        setCurrentMonth((month + 2) % 12)
+        if (month == 8 || day == 9 && day <= 15) {
+            setDeliverDay('日頃');
+            setCurrentDay(15)
+        }
+        else setDeliverDay('末頃');
+    }, [])
+
     return (
         <div className="h-screen">
             <Header />
             <div className="py-16 flex flex-col justify-center relative">
                 <div className="max-w-4xl mx-auto w-full">
                     <div className="flex flex-col gap-4 items-center justify-center py-5 border-[1px] border-black mb-3">
-                        <span className="text-black text-4xl font-extrabold">今注文すると <span className="text-[#FF0000] text-5xl font-bold">X</span> 月<span className="text-[#FF0000] text-5xl font-bold">X</span> 日 に発送予定</span>
+                        <span className="text-black text-4xl font-extrabold">今注文すると
+                            <span className="text-[#FF0000] text-5xl font-bold">{currentMonth}</span> 月
+                            {currentDay != 0 && <span className="text-[#FF0000] text-5xl font-bold">{currentDay}</span>}{deliverDay} に発送予定
+                        </span>
                         <span className="text-black font-medium text-base">お届け予定日 (納期)の目安は、<a href="/deliverschesule"><span className="text-blue-600">こちらのページ</span></a>をご確認ください。</span>
                     </div>
                     <div className="grid grid-cols-5 items-center text-center px-10">
@@ -60,17 +78,17 @@ export default function FlagBuy() {
                             <span className="flex items-center text-lg">(税込)</span>
                         </div>
                         <div className="flex gap-4 items-center">
-                            <a href="/">
+                            <Link to="/">
                                 <button className="bg-blue-800 p-2.5 text-white font-semibold">
                                     新しいフラッグを作成
                                 </button>
-                            </a>
-                            <a href="/order">
+                            </Link>
+                            <Link to="/order">
                                 <button className="bg-orange-500 p-2.5 text-white font-semibold flex gap-3">
                                     <GiShoppingCart size={22} />
                                     チェックアウト
                                 </button>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
