@@ -3,6 +3,13 @@ export interface IPoint {
     y: number;
 }
 
+export interface ICrop {
+    x1: number;
+    x2: number;
+    y1: number;
+    y2: number;
+}
+
 export interface ILayer {
     id: string;
     name: string;
@@ -11,8 +18,9 @@ export interface ILayer {
     canvas: HTMLCanvasElement;
     width: number;
     height: number;
-    scale: { x: number, y: number },
-    position: { x: number, y: number },
+    crop: ICrop;
+    scale: IPoint,
+    position: IPoint,
     rotation: number,
     visible: boolean;
     locked: boolean;
