@@ -5,7 +5,7 @@ import { MASK_IMAGES } from "../constants/constants";
 import { HitTestCode } from "../constants/enums";
 import { ILayer, IPoint } from "../constants/interfaces";
 import { CanvasContext } from "../provider/CanvasProvider";
-import { calculateRotationAngle, calculateScale, getLayerTransformedPoints, getTransformMatrix, Icon, isContain, isInBox, loadImage } from "../utils";
+import { calculateRotationAngle, calculateScale, getLayerTransformedPoints, getTransformMatrix, isContain, isInBox, loadImage } from "../utils";
 
 const Canvas: FC = () => {
     const { canvasRef, maskIndex, layers, setLayers, addLayer, selectedLayerId, setSelectedLayerId, zoom } = useContext(CanvasContext);
@@ -15,10 +15,11 @@ const Canvas: FC = () => {
     const maskRef = useRef<HTMLImageElement>();
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
-    const closeIconRef = useRef(new Icon('/icons/cross.png'));
-    const rotateIconRef = useRef(new Icon('/icons/rotate-right.png'));
-    const scaleIconRef = useRef(new Icon('/icons/scale.png'));
-    const cloneIconRef = useRef(new Icon('/icons/duplicate.png'));
+    const closeIconRef = useRef<HTMLImageElement>();
+    const rotateIconRef = useRef<HTMLImageElement>();
+    const scaleIconRef = useRef<HTMLImageElement>();
+    const cloneIconRef = useRef<HTMLImageElement>();
+    const waterMarkRef = useRef<HTMLImageElement>();
     const layersRef = useRef<ILayer[]>([]);
     const selectedLayerRef = useRef<ILayer | null>();
     const selectedLayerIdRef = useRef<string | null>();
@@ -67,6 +68,14 @@ const Canvas: FC = () => {
                     ctx.drawImage(maskRef.current, 0, 0);
                     ctx.restore();
                 }
+
+                if (waterMarkRef.current) {
+                    for (let i = 0; i < height; i += 160) {
+                        for (let j = 0; j < width; j+= 1024) {
+                            ctx.drawImage(waterMarkRef.current, j, i, 256, 40);
+                        }
+                    }
+                }
             }
         } catch (err: any) {
             console.error(err.message);
@@ -96,17 +105,21 @@ const Canvas: FC = () => {
                         for (let i = 0; i < points.length; i++) {
                             ctx.lineTo(points[i].x, points[i].y);
                         }
-                        ctx.setLineDash([]);
                         ctx.closePath();
+                        ctx.setLineDash([]);
                         ctx.strokeStyle = 'white';
                         ctx.stroke();
                         ctx.setLineDash([5, 5]);
                         ctx.strokeStyle = 'black';
                         ctx.stroke();
-                        closeIconRef.current.render(ctx, points[0].x - 12, points[0].y - 12);
-                        rotateIconRef.current.render(ctx, points[1].x - 12, points[1].y - 12);
-                        scaleIconRef.current.render(ctx, points[2].x - 12, points[2].y - 12);
-                        cloneIconRef.current.render(ctx, points[3].x - 12, points[3].y - 12);
+                        if (closeIconRef.current)
+                            ctx.drawImage(closeIconRef.current, points[0].x - 12, points[0].y - 12);
+                        if (rotateIconRef.current)
+                            ctx.drawImage(rotateIconRef.current, points[1].x - 12, points[1].y - 12);
+                        if (scaleIconRef.current)
+                            ctx.drawImage(scaleIconRef.current, points[2].x - 12, points[2].y - 12);
+                        if (cloneIconRef.current)
+                            ctx.drawImage(cloneIconRef.current, points[3].x - 12, points[3].y - 12);
                     }
                 });
             }
@@ -120,6 +133,13 @@ const Canvas: FC = () => {
     useEffect(() => {
         animationRef.current = requestAnimationFrame(render);
         guideAnimationRef.current = requestAnimationFrame(renderGuide);
+        (async () => {
+            closeIconRef.current = await loadImage('/icons/cross.png');
+            rotateIconRef.current = await loadImage('/icons/rotate-right.png');
+            scaleIconRef.current = await loadImage('/icons/scale.png');
+            cloneIconRef.current = await loadImage('/icons/duplicate.png');
+            waterMarkRef.current = await loadImage('/watermark.png');
+        })();
         return () => {
             cancelAnimationFrame(animationRef.current);
             cancelAnimationFrame(guideAnimationRef.current);
@@ -141,7 +161,7 @@ const Canvas: FC = () => {
     useEffect(() => {
         selectedLayerIdRef.current = selectedLayerId;
         selectedLayerRef.current = _.cloneDeep(layers.find((layer) => layer.id == selectedLayerId));
-    }, [selectedLayerId]);
+    }, [layers, selectedLayerId]);
 
     useEffect(() => {
         zoomRef.current = zoom;
@@ -267,9 +287,7 @@ const Canvas: FC = () => {
                 onMouseMove={handleMouseMove}
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
-            >
-
-            </canvas>
+            />
         </div>
     )
 }
