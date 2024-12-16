@@ -22,7 +22,7 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
     const [showImageCropModal, setShowImageCropModal] = useState(false);
     const [showImageAdjustModal, setShowImageAdjustModal] = useState(false);
     const totalPrice = useMemo(() => goods.reduce((prev, good) => prev + MASK_IMAGES[good.index].price * good.amount, 0), [goods]);
-
+    const flagtype = maskIndex == 0 ? 'レギュラーフラッグ' : 'スイングフラッグ';
     const handleAdd = async () => {
         if (canvasRef && canvasRef.current) {
             const canvas = canvasRef.current;
@@ -39,7 +39,7 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
                 tempCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 128, 128);
 
                 const prevImageURL = tempCanvas.toDataURL('image/png');
-                setGoods([...goods, { index: maskIndex, image: imageURL, prevImage: prevImageURL, amount: productnumber }]);
+                setGoods([...goods, { index: maskIndex, image: imageURL, prevImage: prevImageURL, amount: productnumber, flagtype: flagtype }]);
             }
         }
     }

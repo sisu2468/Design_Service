@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { GiShoppingCart } from "react-icons/gi";
 import { IoIosClose } from "react-icons/io";
 import { Link } from "react-router-dom";
@@ -11,6 +11,21 @@ import { formatNumber } from "../utils";
 export default function FlagBuy() {
     const { goods, setGoods } = useContext(OrderContext);
     const totalPrice = useMemo(() => goods.reduce((prev, good) => prev + MASK_IMAGES[good.index].price * good.amount, 0), [goods]);
+    const [currentMonth, setCurrentMonth] = useState<number>(0)
+    const [currentDay, setCurrentDay] = useState<number>(0)
+    const [deliverDay, setDeliverDay] = useState<string>('');
+
+    useEffect(() => {
+        const date = new Date()
+        const month = date.getMonth() + 1 // getMonth() returns 0-11, so we add 1
+        const day = date.getDay() + 1 // getMonth() returns 0-11, so we add 1
+        setCurrentMonth((month + 2) % 12)
+        if (month == 8 || day == 9 && day <= 15) {
+            setDeliverDay('日頃');
+            setCurrentDay(15)
+        }
+        else setDeliverDay('末頃');
+    }, [])
 
     return (
         <div className="h-screen">
@@ -18,8 +33,11 @@ export default function FlagBuy() {
             <div className="py-16 flex flex-col justify-center relative">
                 <div className="max-w-4xl mx-auto w-full">
                     <div className="flex flex-col gap-4 items-center justify-center py-5 border-[1px] border-black mb-3">
-                        <span className="text-black text-4xl font-extrabold">今注文すると <span className="text-[#FF0000] text-5xl font-bold">X</span> 月<span className="text-[#FF0000] text-5xl font-bold">X</span> 日 に発送予定</span>
-                        <span className="text-black font-medium text-base">お届け予定日 (納期)の目安は、<a href="/order"><span className="text-blue-600">こちらのページ</span></a>をご確認ください。</span>
+                        <span className="text-black text-4xl font-extrabold">今注文すると
+                            <span className="text-[#FF0000] text-5xl font-bold">{currentMonth}</span> 月
+                            {currentDay != 0 && <span className="text-[#FF0000] text-5xl font-bold">{currentDay}</span>}{deliverDay} に発送予定
+                        </span>
+                        <span className="text-black font-medium text-base">お届け予定日 (納期)の目安は、<a href="/deliverschesule"><span className="text-blue-600">こちらのページ</span></a>をご確認ください。</span>
                     </div>
                     <div className="grid grid-cols-5 items-center text-center px-10">
                         <div className="w-36"></div>
@@ -39,17 +57,17 @@ export default function FlagBuy() {
                                 />
                             </div>
                             <div className="flex flex-col gap-2 items-center">
-                                <span className="font-normal">レギュラーフラッグ</span>
+                                <span className="font-normal">{good.flagtype}</span>
                                 <button className="px-1.5 py-2 bg-blue-600 text-white font-semibold">デザインを編集</button>
                             </div>
                             <div className="flex items-center justify-center">
-                                <span>¥{MASK_IMAGES[good.index].price}</span>
+                                <span>¥{formatNumber(MASK_IMAGES[good.index].price)}</span>
                             </div>
                             <div className="flex items-center justify-center">
                                 <BuyNumberCount productnumber={good.amount} setProductNumber={(amount) => setGoods(goods.map((good, i) => index == i ? { ...good, amount } : good))} />
                             </div>
                             <div className="flex items-center justify-center">
-                                <span>¥{MASK_IMAGES[good.index].price * good.amount}</span>
+                                <span>¥{formatNumber(MASK_IMAGES[good.index].price * good.amount)}</span>
                             </div>
                         </div>
                     ))}

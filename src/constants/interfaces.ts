@@ -31,4 +31,5 @@ export interface IGood {
     image: string;
     prevImage: string;
     amount: number;
+    flagtype: string;
 }
