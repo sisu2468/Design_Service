@@ -1,16 +1,17 @@
 import axios from "axios";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch } from "react-icons/fa";
 import { FaSpinner } from "react-icons/fa6";
 import { CanvasContext } from "../../provider/CanvasProvider";
 
 const FreeImages = () => {
     const { addLayer } = useContext(CanvasContext);
     const imageContainerRef = useRef<HTMLDivElement | null>(null);
+    const queryRef = useRef("");
+    const [query, setQuery] = useState("");
     const [page, setPage] = useState(1);
     const [images, setImages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [searchQuery, setSearchQuery] = useState("");
 
     const { leftImages, rightImages } = useMemo(() => {
         const leftImages = [], rightImages = [];
@@ -27,35 +28,27 @@ const FreeImages = () => {
         return { leftImages, rightImages };
     }, [images]);
 
-    const fetchImages = async (page: number) => {
+    const fetchImages = async (images: any[], query: string, page: number) => {
         setIsLoading(true);
         try {
-            const res = await axios.get(`https://pixabay.com/api/?key=47233717-bdc36cadff11da7fe84651a16&q=${searchQuery}&per_page=20&page=${page}`);
-            setImages((prev) => [...prev, ...res.data.hits]);
+            const res = await axios.get(`https://pixabay.com/api/?key=47233717-bdc36cadff11da7fe84651a16&q=${query}&per_page=20&page=${page}`);
+            setImages([...images, ...res.data.hits]);
         } catch (err: any) {
             console.error(err.message);
         }
         setIsLoading(false);
+        setQuery(query);
         setPage(page);
     };
 
     useEffect(() => {
-        fetchImages(1);
-    }, [searchQuery]);
-
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(event.target.value);
-    };
-
-    const handleSearchSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        setSearchQuery(searchQuery.trim());
-    };
+        fetchImages([], "", 1);
+    }, []);
 
     const handleScroll = () => {
         const { scrollTop, clientHeight, scrollHeight } = imageContainerRef.current!;
         if (scrollHeight - scrollTop <= clientHeight && !isLoading) {
-            fetchImages(page + 1);
+            fetchImages(images, query, page + 1);
         }
     };
 
@@ -64,14 +57,15 @@ const FreeImages = () => {
             <div className="flex items-center">
                 <input
                     type="text"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSearchSubmit(e)}
+                    onChange={(e) => {
+                        queryRef.current = e.target.value;
+                    }}
+                    onKeyUp={(e) => e.key === "Enter" && fetchImages([], queryRef.current, 1)}
                     placeholder="キーワード"
                     className="w-full px-3 py-1 border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
                 />
                 <button
-                    onClick={handleSearchSubmit}
+                    onClick={() => fetchImages([], queryRef.current, 1)}
                     className="bg-gray-800 text-white px-4 py-2 hover:bg-gray-600"
                 >
                     <FaSearch size={16} />
