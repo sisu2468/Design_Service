@@ -1,8 +1,8 @@
+import axios from "axios";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { FaSearch } from 'react-icons/fa';
 import { FaSpinner } from "react-icons/fa6";
 import { CanvasContext } from "../../provider/CanvasProvider";
-import axios from "axios";
 
 const FreeImages = () => {
     const { addLayer } = useContext(CanvasContext);
@@ -27,7 +27,7 @@ const FreeImages = () => {
         return { leftImages, rightImages };
     }, [images]);
 
-    const fetchImages = async () => {
+    const fetchImages = async (page: number) => {
         setIsLoading(true);
         try {
             const res = await axios.get(`https://pixabay.com/api/?key=47233717-bdc36cadff11da7fe84651a16&q=${searchQuery}&per_page=20&page=${page}`);
@@ -36,10 +36,11 @@ const FreeImages = () => {
             console.error(err.message);
         }
         setIsLoading(false);
+        setPage(page);
     };
 
     useEffect(() => {
-        fetchImages();
+        fetchImages(1);
     }, [searchQuery]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,8 +55,7 @@ const FreeImages = () => {
     const handleScroll = () => {
         const { scrollTop, clientHeight, scrollHeight } = imageContainerRef.current!;
         if (scrollHeight - scrollTop <= clientHeight && !isLoading) {
-            setPage(page + 1);
-            fetchImages();
+            fetchImages(page + 1);
         }
     };
 
