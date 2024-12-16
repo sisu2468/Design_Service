@@ -4,20 +4,6 @@ const formatNumber = (num: number) => {
     return num.toLocaleString();
 };
 
-export class Icon {
-    private image: HTMLImageElement;
-
-    constructor(src: string) {
-        const image = new Image();
-        this.image = image;
-        image.src = src;
-    }
-
-    render(ctx: CanvasRenderingContext2D, x: number, y: number) {
-        ctx.drawImage(this.image, x, y);
-    }
-}
-
 const loadImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();
     image.crossOrigin = 'anonymous';
@@ -130,4 +116,3 @@ const calculateScale = (matrix: number[][], width: number, height: number, p: IP
 }
 
 export { calculateRotationAngle, calculateScale, formatNumber, getLayerTransformedPoints, getTransformedPoint, getTransformMatrix, isContain, isInBox, isLeft, loadImage };
-
