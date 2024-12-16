@@ -68,14 +68,6 @@ const Canvas: FC = () => {
                     ctx.drawImage(maskRef.current, 0, 0);
                     ctx.restore();
                 }
-
-                if (waterMarkRef.current) {
-                    for (let i = 0; i < height; i += 160) {
-                        for (let j = 0; j < width; j+= 1024) {
-                            ctx.drawImage(waterMarkRef.current, j, i, 256, 40);
-                        }
-                    }
-                }
             }
         } catch (err: any) {
             console.error(err.message);
@@ -122,6 +114,14 @@ const Canvas: FC = () => {
                             ctx.drawImage(cloneIconRef.current, points[3].x - 12, points[3].y - 12);
                     }
                 });
+
+                if (waterMarkRef.current) {
+                    for (let i = 0; i < height; i += 40) {
+                        for (let j = 0; j < width; j+= 256) {
+                            ctx.drawImage(waterMarkRef.current, j, i, 64, 10);
+                        }
+                    }
+                }
             }
         } catch (err: any) {
             console.error(err.message);
