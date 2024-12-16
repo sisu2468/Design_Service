@@ -55,6 +55,7 @@ const CanvasProvider: FC<IProps> = ({ children }) => {
             canvas,
             width: image.width,
             height: image.height,
+            crop: { x1: 0, y1: 0, x2: image.width, y2: image.height },
             scale: { x: scale?.x || 1, y: scale?.y || 1 },
             rotation: rotation || 0,
             position: { x: position ? position.x + 50 : image.width / 2, y: position ? position.y + 50 : image.height / 2 },
