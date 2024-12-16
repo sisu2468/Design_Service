@@ -60,12 +60,20 @@ const FreeImages = () => {
                     onChange={(e) => {
                         queryRef.current = e.target.value;
                     }}
-                    onKeyUp={(e) => e.key === "Enter" && fetchImages([], queryRef.current, 1)}
+                    onKeyUp={(e) => {
+                        if (e.key === "Enter") {
+                            imageContainerRef.current!.scrollTop = 0;
+                            fetchImages([], queryRef.current, 1);
+                        }
+                    }}
                     placeholder="キーワード"
                     className="w-full px-3 py-1 border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
                 />
                 <button
-                    onClick={() => fetchImages([], queryRef.current, 1)}
+                    onClick={() => {
+                        imageContainerRef.current!.scrollTop = 0;
+                        fetchImages([], queryRef.current, 1);
+                    }}
                     className="bg-gray-800 text-white px-4 py-2 hover:bg-gray-600"
                 >
                     <FaSearch size={16} />
