@@ -34,8 +34,8 @@ const LeftBar = ({ productnumber, setProductNumber, barname, setBarName }: Numbe
                 </div>
                 <NumberCount productnumber={productnumber} setProductNumber={setProductNumber} />
             </div>
-            <div className="flex-grow flex">
-                <div className="bg-[#3f4652] border-r border-gray-400 w-20">
+            <div className="flex-[1_1_0] flex">
+                <div className="flex-none w-20 bg-[#3f4652] border-r border-gray-400">
                     <ul className="flex flex-col gap-2">
                         <li
                             onClick={() => setBarName('items')}
@@ -83,7 +83,7 @@ const LeftBar = ({ productnumber, setProductNumber, barname, setBarName }: Numbe
                         </li>
                     </ul>
                 </div>
-                <div className='flex-grow bg-[#3f4652]'>
+                <div className='flex-grow h-full bg-[#3f4652]'>
                     {barname === 'items' && (
                         <Product />
                     )}
