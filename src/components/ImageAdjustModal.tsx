@@ -26,7 +26,7 @@ const ImageAdjustModal: FC<Props> = ({ isOpen, onClose }) => {
         selectedLayerRef.current = _.cloneDeep(layers.find((layer) => layer.id == selectedLayerId));
         if (selectedLayerRef.current) {
             const { width, height } = selectedLayerRef.current.image;
-            const scale = 480 / width;
+            const scale = 640 / width;
             setWidth(width * scale);
             setHeight(height * scale);
         }
@@ -74,7 +74,7 @@ const ImageAdjustModal: FC<Props> = ({ isOpen, onClose }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <div className="flex flex-col gap-2">
-                <div key={selectedLayerId} className="relative w-[480px]">
+                <div key={selectedLayerId} className="relative w-[640px]">
                     <canvas
                         ref={canvasRef}
                         width={selectedLayerRef.current?.image.width} height={selectedLayerRef.current?.image.height}
