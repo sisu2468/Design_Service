@@ -76,7 +76,7 @@ export default function OrderForm() {
 
     const sendDeliveryData = async () => {
         try {
-            const response = await axios.post('https://design-service-backend.vercel.app/deliver', deliveryData);
+            const response = await axios.post('http://192.168.146.159:3000/deliver', deliveryData);
             if (response.status === 200) {
                 navigate('/order');
                 console.log('Success');

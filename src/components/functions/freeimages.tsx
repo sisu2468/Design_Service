@@ -47,7 +47,7 @@ const FreeImages = () => {
 
     const handleScroll = () => {
         const { scrollTop, clientHeight, scrollHeight } = imageContainerRef.current!;
-        if (scrollHeight - scrollTop <= clientHeight && !isLoading) {
+        if (scrollHeight - scrollTop <= clientHeight + 20 && !isLoading) {
             fetchImages(images, query, page + 1);
         }
     };
