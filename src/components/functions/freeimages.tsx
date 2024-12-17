@@ -31,7 +31,7 @@ const FreeImages = () => {
     const fetchImages = async (images: any[], query: string, page: number) => {
         setIsLoading(true);
         try {
-            const res = await axios.get(`https://pixabay.com/api/?key=47233717-bdc36cadff11da7fe84651a16&q=${query}&per_page=35&page=${page}`);
+            const res = await axios.get(`https://pixabay.com/api/?key=47233717-bdc36cadff11da7fe84651a16&q=${query}&per_page=45&page=${page}`);
             setImages([...images, ...res.data.hits]);
         } catch (err: any) {
             console.error(err.message);
