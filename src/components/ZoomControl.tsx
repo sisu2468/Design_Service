@@ -16,7 +16,7 @@ const ZoomControl = () => {
                     {(zoom * 100).toFixed(0)}%
                 </p>
             </div>
-            <div className="w-[32px] h-[32px] flex justify-center items-center" onClick={() => setZoom(Math.min(2.5, zoom + 0.1))}>
+            <div className="w-[32px] h-[32px] flex justify-center items-center" onClick={() => setZoom(Math.min(0.10, zoom + 0.1))}>
                 <FaPlus color="white" />
             </div>
         </div>
