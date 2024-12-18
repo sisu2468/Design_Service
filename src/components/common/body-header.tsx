@@ -21,8 +21,7 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
     const { goods, setGoods } = useContext(OrderContext);
     const [showImageCropModal, setShowImageCropModal] = useState(false);
     const [showImageAdjustModal, setShowImageAdjustModal] = useState(false);
-    const totalPrice = useMemo(() => goods.reduce((prev, good) => prev + MASK_IMAGES[good.index].price * productnumber, 0), [goods]);
-    console.log(totalPrice, productnumber, goods);
+    const totalPrice = MASK_IMAGES[maskIndex].price * productnumber;
     
     const flagtype = maskIndex == 0 ? 'レギュラーフラッグ' : 'スイングフラッグ';
     const handleAdd = async () => {
