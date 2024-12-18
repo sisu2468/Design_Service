@@ -7,8 +7,8 @@ import { MASK_IMAGES } from "../../constants/constants";
 import { CanvasContext } from "../../provider/CanvasProvider";
 import { OrderContext } from "../../provider/OrderProvider";
 import { formatNumber } from "../../utils";
-import ImageCropModal from "../ImageCropModal";
 import ImageAdjustModal from "../ImageAdjustModal";
+import ImageCropModal from "../ImageCropModal";
 
 type NumberCountProps = {
     productnumber: number;
@@ -34,10 +34,12 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
             if (tempCtx) {
                 const rate = Math.min(128 / canvas.width, 128 / canvas.height);
 
-                tempCanvas.width = canvas.width * rate;
-                tempCanvas.height = canvas.height * rate;
+                const width = canvas.width * rate;
+                const height = canvas.height * rate;
+                tempCanvas.width = width;
+                tempCanvas.height = height;
 
-                tempCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 128, 128);
+                tempCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, width, height);
 
                 const prevImageURL = tempCanvas.toDataURL('image/png');
                 setGoods([...goods, { index: maskIndex, image: imageURL, prevImage: prevImageURL, amount: productnumber, flagtype: flagtype }]);
