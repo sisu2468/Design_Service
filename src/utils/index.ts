@@ -112,7 +112,9 @@ const calculateRotationAngle = (center: IPoint, topRight: IPoint, p: IPoint) => 
 const calculateScale = (matrix: number[][], width: number, height: number, p: IPoint) => {
     const inverseMatrix = calculateInverseMatrix(matrix);
     const p2 = multiplyMatrixByVector(inverseMatrix, [p.x, p.y, 1]);
-    return { x: p2[0] / (width / 2), y: p2[1] / (height / 2) };
+    const x = p2[0] / (width / 2);
+    const y = p2[1] / (height / 2);
+    return { x: Math.min(x, y), y: Math.min(x, y) };
 }
 
 export { calculateRotationAngle, calculateScale, formatNumber, getLayerTransformedPoints, getTransformedPoint, getTransformMatrix, isContain, isInBox, isLeft, loadImage };
