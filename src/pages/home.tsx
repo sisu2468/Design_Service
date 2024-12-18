@@ -14,11 +14,9 @@ export default function Home() {
             <Header />
             <div className="flex-[1_1_0] flex">
                 <LeftBar productnumber={productnumber} setProductNumber={setProductNumber} barname={barname} setBarName={setBarName} />
-                <div className="relative w-[calc(100%-320px)] flex flex-col">
+                <div className="w-[calc(100%-320px)] flex flex-col">
                     <BodyHeader productnumber={productnumber} setProductNumber={setProductNumber} />
-                    <div className="relative flex-[1_1_0] bg-white overflow-auto">
-                        <Canvas />
-                    </div>
+                    <Canvas />
                     <ZoomControl />
                 </div>
             </div>
