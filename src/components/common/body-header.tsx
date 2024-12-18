@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { useContext, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { RiCropLine } from "react-icons/ri";
@@ -17,7 +18,7 @@ type NumberCountProps = {
 
 export default function BodyHeader({ productnumber }: NumberCountProps) {
     const navigate = useNavigate();
-    const { canvasRef, maskIndex, selectedLayerId } = useContext(CanvasContext);
+    const { canvasRef, maskIndex, layers, selectedLayerId } = useContext(CanvasContext);
     const { goods, setGoods } = useContext(OrderContext);
     const [showImageCropModal, setShowImageCropModal] = useState(false);
     const [showImageAdjustModal, setShowImageAdjustModal] = useState(false);
@@ -42,7 +43,7 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
                 tempCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, width, height);
 
                 const prevImageURL = tempCanvas.toDataURL('image/png');
-                setGoods([...goods, { index: maskIndex, image: imageURL, prevImage: prevImageURL, amount: productnumber, flagtype: flagtype }]);
+                setGoods([...goods, { index: maskIndex, image: imageURL, prevImage: prevImageURL, amount: productnumber, flagtype: flagtype, layers: _.cloneDeep(layers) }]);
             }
         }
     }

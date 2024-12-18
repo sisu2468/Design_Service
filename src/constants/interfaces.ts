@@ -32,4 +32,5 @@ export interface IGood {
     prevImage: string;
     amount: number;
     flagtype: string;
+    layers: ILayer[];
 }

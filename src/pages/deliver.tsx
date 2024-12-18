@@ -1,14 +1,17 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { GiShoppingCart } from "react-icons/gi";
 import { IoIosClose } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BuyNumberCount from "../components/common/buynumbercount";
 import Header from "../components/common/header";
 import { MASK_IMAGES } from "../constants/constants";
+import { CanvasContext } from "../provider/CanvasProvider";
 import { OrderContext } from "../provider/OrderProvider";
 import { formatNumber } from "../utils";
 
 export default function FlagBuy() {
+    const navigate = useNavigate();
+    const { setLayers, setMaskIndex } = useContext(CanvasContext);
     const { goods, setGoods } = useContext(OrderContext);
     const totalPrice = useMemo(() => goods.reduce((prev, good) => prev + MASK_IMAGES[good.index].price * good.amount, 0), [goods]);
     const [currentMonth, setCurrentMonth] = useState<number>(0)
@@ -58,7 +61,13 @@ export default function FlagBuy() {
                             </div>
                             <div className="flex flex-col gap-2 items-center">
                                 <span className="font-normal">{good.flagtype}</span>
-                                <button className="px-1.5 py-2 bg-blue-600 text-white font-semibold">デザインを編集</button>
+                                <button className="px-1.5 py-2 bg-blue-600 text-white font-semibold" onClick={() => {
+                                    setLayers(good.layers);
+                                    setMaskIndex(good.index);
+                                    navigate('/');
+                                }}>
+                                    デザインを編集
+                                </button>
                             </div>
                             <div className="flex items-center justify-center">
                                 <span>¥{formatNumber(MASK_IMAGES[good.index].price)}</span>
