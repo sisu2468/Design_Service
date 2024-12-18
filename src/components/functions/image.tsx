@@ -41,7 +41,7 @@ const UploadImage = () => {
                     onClick={() => addLayer(imageUrl)}
                     className="border-[1px] border-gray-400 text-white text-sm px-6 py-2 hover:bg-gray-600"
                 >
-                    または写真を選択
+                    画像を挿入
                 </button>
             </div>
         </div>
