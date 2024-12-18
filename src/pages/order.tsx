@@ -247,7 +247,7 @@ export default function OrderForm() {
                                     理解しました
                                 </p>
                                 <p className='flex items-center flex-wrap text-sm'>
-                                    ※万が一印刷不良が発生した場合、再印刷手配となるため、納期がさらに遅れる可能性があります。発注の時期によっては本番に間に合わない可能性もあります。納期には余裕をもってご発注くださいますよう、よろしくお願いいたします。（納期スケジュールを確認する）
+                                    <span>※万が一印刷不良が発生した場合、再印刷手配となるため、納期がさらに遅れる可能性があります。発注の時期によっては本番に間に合わない可能性もあります。納期には余裕をもってご発注くださいますよう、よろしくお願いいたします。<a href="https://bremen.co.jp/digital_flag/flow/#schedule" className="text-blue-500 underline">納期スケジュールを確認する</a></span>
                                     <label className="inline-flex items-center cursor-pointer">
                                         <input
                                             type="checkbox"
