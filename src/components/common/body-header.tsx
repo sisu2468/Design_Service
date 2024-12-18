@@ -22,7 +22,7 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
     const [showImageCropModal, setShowImageCropModal] = useState(false);
     const [showImageAdjustModal, setShowImageAdjustModal] = useState(false);
     const totalPrice = MASK_IMAGES[maskIndex].price * productnumber;
-    
+
     const flagtype = maskIndex == 0 ? 'レギュラーフラッグ' : 'スイングフラッグ';
     const handleAdd = async () => {
         if (canvasRef && canvasRef.current) {
@@ -77,11 +77,11 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
                     </div>
                 </div>
                 <div className="flex gap-2">
-                    <button className="p-2 bg-gray-100 rounded">
-                        <p className="text-xs font-medium text-black" onClick={handleAdd}>カートに追加</p>
+                    <button className="p-2 bg-gray-100 rounded" onClick={handleAdd}>
+                        <p className="text-xs font-medium text-black">カートに追加</p>
                     </button>
-                    <button className="p-2 bg-gray-100 rounded">
-                        <p className="text-xs font-medium text-black" onClick={() => navigate('/checkout')}>チェックアウト</p>
+                    <button className="p-2 bg-gray-100 rounded" onClick={() => navigate('/checkout')}>
+                        <p className="text-xs font-medium text-black" >チェックアウト</p>
                     </button>
                 </div>
             </div>
