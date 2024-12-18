@@ -43,7 +43,7 @@ export default function FlagBuy() {
                         <div className="w-36"></div>
                         <span>商品</span>
                         <span>金額</span>
-                        <span>量</span>
+                        <span>数量</span>
                         <span>小計</span>
                     </div>
                     {goods.map((good, index) => (
