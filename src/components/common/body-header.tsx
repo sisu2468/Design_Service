@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { RiCropLine } from "react-icons/ri";
 import { TfiPencil } from "react-icons/tfi";
