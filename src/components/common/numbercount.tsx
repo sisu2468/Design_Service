@@ -12,8 +12,8 @@ const NumberCount = ({ productnumber, setProductNumber }: NumberCountProps) => {
             <div className="flex items-center gap-2 pl-1">
                 <button
                     className="border-2 border-gray-500 rounded-full w-7 h-7 flex items-center justify-center hover:bg-gray-100"
-                    onClick={() => setProductNumber(Math.max(1, productnumber - 1))}
-                    disabled={productnumber <= 1}
+                    onClick={() => setProductNumber(Math.max(6, productnumber - 1))}
+                    disabled={productnumber <= 6}
                 >
                     <AiOutlineMinus size={16} className={`${productnumber <= 1 ? 'text-gray-300' : 'text-gray-500'}`} />
                 </button>

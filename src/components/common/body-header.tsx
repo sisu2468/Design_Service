@@ -21,7 +21,9 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
     const { goods, setGoods } = useContext(OrderContext);
     const [showImageCropModal, setShowImageCropModal] = useState(false);
     const [showImageAdjustModal, setShowImageAdjustModal] = useState(false);
-    const totalPrice = useMemo(() => goods.reduce((prev, good) => prev + MASK_IMAGES[good.index].price * good.amount, 0), [goods]);
+    const totalPrice = useMemo(() => goods.reduce((prev, good) => prev + MASK_IMAGES[good.index].price * productnumber, 0), [goods]);
+    console.log(totalPrice, productnumber, goods);
+    
     const flagtype = maskIndex == 0 ? 'レギュラーフラッグ' : 'スイングフラッグ';
     const handleAdd = async () => {
         if (canvasRef && canvasRef.current) {
@@ -57,6 +59,9 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
                         </div>
                     </>
                 )}
+                <div>
+                    <span className="text-white font-medium">フラッグ画像には透かしが入っておりますが、実際の商品には印刷されません。</span>
+                </div>
             </div>
             <ImageCropModal isOpen={showImageCropModal} onClose={() => setShowImageCropModal(false)} />
             <ImageAdjustModal isOpen={showImageAdjustModal} onClose={() => setShowImageAdjustModal(false)} />

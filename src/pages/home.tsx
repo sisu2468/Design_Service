@@ -6,7 +6,7 @@ import LeftBar from "../components/common/leftbar";
 import ZoomControl from "../components/ZoomControl";
 
 export default function Home() {
-    const [productnumber, setProductNumber] = useState<number>(1);
+    const [productnumber, setProductNumber] = useState<number>(6);
     const [barname, setBarName] = useState('items');
 
     return (
