@@ -73,6 +73,7 @@ export default function OrderForm() {
         products: goods.map(good => ({
             flagtype: good.flagtype,
             amount: good.amount,
+            image: good.image, // Include the image data
             subtotal: MASK_IMAGES[good.index].price * good.amount, // Calculate subtotal
         })),
         totalprice: totalPrice.toString(), // Ensure totalprice is a string

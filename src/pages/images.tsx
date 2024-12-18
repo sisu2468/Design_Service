@@ -6,7 +6,7 @@ export default function Preview_Images() {
     console.log(goods);
     
     return (
-        <div className="p-10 flex gap-5">
+        <div className="p-10 grid grid-cols-3">
             {goods.map((good, index) => (
                 <img src={good.prevImage} className="w-[600px] h-[600px] object-scale-down" alt="レギュラーフラッグ" key={index}/>
             ))}
