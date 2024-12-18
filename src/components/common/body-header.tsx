@@ -33,7 +33,7 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
             const tempCanvas = document.createElement('canvas');
             const tempCtx = tempCanvas.getContext('2d');
             if (tempCtx) {
-                const rate = Math.min(128 / canvas.width, 128 / canvas.height);
+                const rate = Math.min(600 / canvas.width, 600 / canvas.height);
 
                 const width = canvas.width * rate;
                 const height = canvas.height * rate;

@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { OrderContext } from '../provider/OrderProvider';
 import { MASK_IMAGES } from '../constants/constants';
 import { formatNumber } from '../utils';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function OrderForm() {
     const [sameAsCustomer, setSameAsCustomer] = useState(false);
@@ -22,7 +22,7 @@ export default function OrderForm() {
     const [isButtonActive, setIsButtonActive] = useState(false);
     const { goods } = useContext(OrderContext);
     const navigate = useNavigate();
-    console.log("goods", goods);
+    console.log(goods);
 
     useEffect(() => {
         const areAllFieldsFilled = [username, emailaddress, address, huriganaName, groupName].every(
@@ -74,7 +74,7 @@ export default function OrderForm() {
             flagtype: good.flagtype,
             amount: good.amount,
             subtotal: MASK_IMAGES[good.index].price * good.amount, // Calculate subtotal
-        })), 
+        })),
         totalprice: totalPrice.toString(), // Ensure totalprice is a string
         deliverydate: `${currentYear}年 ${currentMonth}月 ${currentDay ? currentDay + deliverDay : deliverDay}`,
     };
@@ -91,7 +91,7 @@ export default function OrderForm() {
         } catch (error) {
             console.error('Fetch error:', error);
         }
-    };    
+    };
 
     return (
         <div className="max-w-6xl mx-auto p-8">
@@ -211,17 +211,25 @@ export default function OrderForm() {
                                     理解しました
                                 </p>
                                 <p className="flex items-center flex-wrap text-sm">
-                                    ※印刷工程の仕組み上、表裏で印刷のズレ（3cm未満）や若干の印刷ムラが発生することがございますことご了承ください。（参考画像を見る）
-                                    <label className="inline-flex items-center cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            checked={confirm2}
-                                            onChange={() => setConfirm2(!confirm2)}
-                                            className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out mr-1"
-                                        />
-                                    </label>
-                                    理解しました
+                                    <span>
+                                        ※印刷工程の仕組み上、表裏で印刷のズレ（3cm未満）や若干の印刷ムラが発生することがございますことご了承ください。
+                                    </span>
+                                    <div className="flex flex-col">
+                                        <Link to="/images" className="text-blue-500 underline">
+                                            参考画像を見る
+                                        </Link>
+                                        <label className="inline-flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={confirm2}
+                                                onChange={() => setConfirm2(!confirm2)}
+                                                className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out mr-2"
+                                            />
+                                            理解しました
+                                        </label>
+                                    </div>
                                 </p>
+
                                 <p className='flex items-center flex-wrap text-sm'>
                                     ※ブレーメンデジタルフラッグはチャイナシルクを使用しております。ご使用の環境下によっては、生地の破れやほつれなどがすぐに発生する可能性がありますが、商品の品質に起因するものではありません。
                                     <label className="inline-flex items-center cursor-pointer">
