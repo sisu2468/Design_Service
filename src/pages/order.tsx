@@ -15,6 +15,8 @@ export default function OrderForm() {
     const [username, setUserName] = useState('');
     const [emailaddress, setEmailAddress] = useState('');
     const [address, setAddress] = useState('');
+    const [huriganaName, setHuriganaName] = useState('');
+    const [groupName, setGroupName] = useState('');
     const [postalnumber, setPostalNumber] = useState('');
     const [phonenumber, setPhoneNumber] = useState('');
     const [isButtonActive, setIsButtonActive] = useState(false);
@@ -23,8 +25,11 @@ export default function OrderForm() {
     console.log("goods", goods);
 
     useEffect(() => {
-        setIsButtonActive(confirm1 && confirm2 && confirm3 && confirm4 && confirm5);
-    }, [confirm1, confirm2, confirm3, confirm4, confirm5]);
+        const areAllFieldsFilled = [username, emailaddress, address, huriganaName, groupName].every(
+            field => field.trim() !== ''
+        );
+        setIsButtonActive(confirm1 && confirm2 && confirm3 && confirm4 && confirm5 && areAllFieldsFilled);
+    }, [confirm1, confirm2, confirm3, confirm4, confirm5, username, emailaddress, address, huriganaName, groupName]);
 
     const totalPrice = goods.reduce((sum, good) => {
         const price = MASK_IMAGES[good.index]?.price || 0;
@@ -108,6 +113,7 @@ export default function OrderForm() {
                                 <input
                                     type="text"
                                     className="w-full border border-gray-300 p-2 rounded-sm"
+                                    onChange={(e) => setHuriganaName(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -115,6 +121,7 @@ export default function OrderForm() {
                                 <input
                                     type="text"
                                     className="w-full border border-gray-300 p-2 rounded-sm"
+                                    onChange={(e) => setGroupName(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -153,7 +160,7 @@ export default function OrderForm() {
                                 <label className="flex items-center space-x-2 cursor-pointer">
                                     <input
                                         type="checkbox"
-                                        checked={sameAsCustomer}
+                                        checked={!sameAsCustomer}
                                         onChange={() => setSameAsCustomer(!sameAsCustomer)}
                                         className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out"
                                     />
