@@ -95,7 +95,7 @@ export default function FlagBuy() {
                             <Link to="/order">
                                 <button className="bg-orange-500 p-2.5 text-white font-semibold flex gap-3">
                                     <GiShoppingCart size={22} />
-                                    カートを見る
+                                    チェックアウト
                                 </button>
                             </Link>
                         </div>

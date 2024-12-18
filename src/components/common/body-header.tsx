@@ -84,7 +84,7 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
                         <p className="text-xs font-medium text-black">カートに追加</p>
                     </button>
                     <button className="p-2 bg-gray-100 rounded" onClick={() => navigate('/checkout')}>
-                        <p className="text-xs font-medium text-black" >チェックアウト</p>
+                        <p className="text-xs font-medium text-black" >カートを見る</p>
                     </button>
                 </div>
             </div>
