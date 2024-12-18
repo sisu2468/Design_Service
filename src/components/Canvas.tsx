@@ -9,6 +9,8 @@ import { calculateRotationAngle, calculateScale, getLayerTransformedPoints, getT
 
 const Canvas: FC = () => {
     const { canvasRef, maskIndex, layers, setLayers, addLayer, selectedLayerId, setSelectedLayerId, zoom } = useContext(CanvasContext);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
     const animationRef = useRef(0);
     const guideAnimationRef = useRef(0);
     const guideCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -87,9 +89,18 @@ const Canvas: FC = () => {
 
                 ctx.clearRect(0, 0, width, height);
 
+                if (waterMarkRef.current) {
+                    for (let i = 0; i < height; i += 40) {
+                        for (let j = 0; j < width; j += 256) {
+                            ctx.drawImage(waterMarkRef.current, j, i, 64, 10);
+                        }
+                    }
+                }
+
                 layersRef.current.forEach(layer => {
                     if (!layer.visible || layer.locked)
                         return;
+                    
                     if (layer.id == selectedLayerIdRef.current) {
                         const points = getLayerTransformedPoints(layer).map(({ x, y }) => ({ x: x * zoomRef.current, y: y * zoomRef.current }));
                         ctx.beginPath();
@@ -114,14 +125,6 @@ const Canvas: FC = () => {
                             ctx.drawImage(cloneIconRef.current, points[3].x - 12, points[3].y - 12);
                     }
                 });
-
-                if (waterMarkRef.current) {
-                    for (let i = 0; i < height; i += 40) {
-                        for (let j = 0; j < width; j+= 256) {
-                            ctx.drawImage(waterMarkRef.current, j, i, 64, 10);
-                        }
-                    }
-                }
             }
         } catch (err: any) {
             console.error(err.message);
@@ -130,19 +133,32 @@ const Canvas: FC = () => {
         guideAnimationRef.current = requestAnimationFrame(renderGuide);
     }
 
+    const loadAssets = async () => {
+        closeIconRef.current = await loadImage('/icons/cross.png');
+        rotateIconRef.current = await loadImage('/icons/rotate-right.png');
+        scaleIconRef.current = await loadImage('/icons/scale.png');
+        cloneIconRef.current = await loadImage('/icons/duplicate.png');
+        waterMarkRef.current = await loadImage('/watermark.png');
+    }
+
     useEffect(() => {
         animationRef.current = requestAnimationFrame(render);
         guideAnimationRef.current = requestAnimationFrame(renderGuide);
-        (async () => {
-            closeIconRef.current = await loadImage('/icons/cross.png');
-            rotateIconRef.current = await loadImage('/icons/rotate-right.png');
-            scaleIconRef.current = await loadImage('/icons/scale.png');
-            cloneIconRef.current = await loadImage('/icons/duplicate.png');
-            waterMarkRef.current = await loadImage('/watermark.png');
-        })();
+
+        loadAssets();
+
+        const resizeObserver = new ResizeObserver(([entry]) => {
+            const { width, height } = entry.contentRect;
+            setContainerSize({ width, height });
+        });
+
+        if (containerRef.current)
+            resizeObserver.observe(containerRef.current);
+
         return () => {
             cancelAnimationFrame(animationRef.current);
             cancelAnimationFrame(guideAnimationRef.current);
+            resizeObserver.disconnect();
         }
     }, []);
 
@@ -268,22 +284,22 @@ const Canvas: FC = () => {
     }
 
     return (
-        <div className="relative" style={{ width: width * zoom, height: height * zoom }}>
+        <div ref={containerRef} className="relative flex-[1_1_0] bg-white overflow-auto">
             <canvas
                 ref={canvasRef}
                 width={width} height={height}
-                className="w-full h-full"
+                style={{ width: width * zoom, height: height * zoom }}
             />
             <canvas
                 ref={guideCanvasRef}
                 className={clsx(
-                    "absolute left-0 top-0",
+                    "absolute left-0 top-0 w-full h-full",
                     (isClosable || isClonable) ? 'cursor-pointer'
                         : (isRotatable || isRotating.current) ? 'cursor-crosshair'
                             : (isScalable || isScaling.current) ? 'cursor-nwse-resize'
                                 : (isDraggable || isDragging.current) ? 'cursor-move' : 'cursor-default'
                 )}
-                width={Math.floor(width * zoom)} height={Math.floor(height * zoom)}
+                width={containerSize.width} height={containerSize.height}
                 onMouseMove={handleMouseMove}
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
