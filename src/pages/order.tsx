@@ -73,7 +73,7 @@ export default function OrderForm() {
         products: goods.map(good => ({
             flagtype: good.flagtype,
             amount: good.amount,
-            // image: good.image, // Include the image data
+            image: good.image, // Include the image data
             subtotal: MASK_IMAGES[good.index].price * good.amount, // Calculate subtotal
         })),
         totalprice: totalPrice.toString(), // Ensure totalprice is a string
@@ -82,7 +82,7 @@ export default function OrderForm() {
 
     const sendDeliveryData = async () => {
         try {
-            const response = await axios.post('https://design-service-backend.vercel.app/deliver', deliveryData);
+            const response = await axios.post('http://sisuworld.life/api/deliver', deliveryData);
             if (response.status === 200) {
                 navigate('/order');
                 console.log('Success');
