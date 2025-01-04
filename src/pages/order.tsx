@@ -5,6 +5,16 @@ import { MASK_IMAGES } from '../constants/constants';
 import { formatNumber } from '../utils';
 import { Link, useNavigate } from "react-router-dom";
 
+const arrayBufferToBase64 = (arrayBuffer: ArrayBuffer) => {
+    const blob = new Blob([arrayBuffer], { type: 'application/octet-stream' })
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+};
+
 export default function OrderForm() {
     const [sameAsCustomer, setSameAsCustomer] = useState(false);
     const [confirm1, setConfirm1] = useState(false);
@@ -22,7 +32,6 @@ export default function OrderForm() {
     const [isButtonActive, setIsButtonActive] = useState(false);
     const { goods } = useContext(OrderContext);
     const navigate = useNavigate();
-    console.log(goods);
 
     useEffect(() => {
         const areAllFieldsFilled = [username, emailaddress, address, huriganaName, groupName].every(
@@ -62,25 +71,26 @@ export default function OrderForm() {
         }
         else setDeliverDay('末頃');
     }, [])
-    const deliveryData = {
-        buyername: username,
-        ordernumber: '12345',
-        emailaddress: emailaddress,
-        postalcode: postalnumber,
-        address: address,
-        telnumber: phonenumber,
-        orderdate: new Date().toISOString(),
-        products: goods.map(good => ({
-            flagtype: good.flagtype,
-            amount: good.amount,
-            image: good.image, // Include the image data
-            subtotal: MASK_IMAGES[good.index].price * good.amount, // Calculate subtotal
-        })),
-        totalprice: totalPrice.toString(), // Ensure totalprice is a string
-        deliverydate: `${currentYear}年 ${currentMonth}月 ${currentDay ? currentDay + deliverDay : deliverDay}`,
-    };
 
     const sendDeliveryData = async () => {
+        const deliveryData = {
+            buyername: username,
+            ordernumber: '12345',
+            emailaddress: emailaddress,
+            postalcode: postalnumber,
+            address: address,
+            telnumber: phonenumber,
+            orderdate: new Date().toISOString(),
+            products: await Promise.all(goods.map(async good => ({
+                flagtype: good.flagtype,
+                amount: good.amount,
+                image: await arrayBufferToBase64(good.image),
+                subtotal: MASK_IMAGES[good.index].price * good.amount,
+            }))),
+            totalprice: totalPrice.toString(),
+            deliverydate: `${currentYear}年 ${currentMonth}月 ${currentDay ? currentDay + deliverDay : deliverDay}`,
+        };
+
         try {
             const response = await axios.post('http://sisuworld.life/api/deliver', deliveryData);
             if (response.status === 200) {

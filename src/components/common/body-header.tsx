@@ -1,3 +1,4 @@
+import { writePsd } from "ag-psd";
 import _ from "lodash";
 import { useContext, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
@@ -29,7 +30,16 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
         if (canvasRef && canvasRef.current) {
             const canvas = canvasRef.current;
 
-            const imageURL = canvasRef.current.toDataURL('image/png');
+            const image = writePsd({
+                width: canvas.width,
+                height: canvas.height,
+                children: [
+                    {
+                        canvas
+                    }
+                ]
+            });
+            
             const tempCanvas = document.createElement('canvas');
             const tempCtx = tempCanvas.getContext('2d');
             if (tempCtx) {
@@ -43,7 +53,7 @@ export default function BodyHeader({ productnumber }: NumberCountProps) {
                 tempCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, width, height);
 
                 const prevImageURL = tempCanvas.toDataURL('image/png');
-                setGoods([...goods, { index: maskIndex, image: imageURL, prevImage: prevImageURL, amount: productnumber, flagtype: flagtype, layers: _.cloneDeep(layers) }]);
+                setGoods([...goods, { index: maskIndex, image, prevImage: prevImageURL, amount: productnumber, flagtype: flagtype, layers: _.cloneDeep(layers) }]);
             }
         }
     }

@@ -28,7 +28,7 @@ export interface ILayer {
 
 export interface IGood {
     index: number;
-    image: string;
+    image: ArrayBuffer;
     prevImage: string;
     amount: number;
     flagtype: string;
