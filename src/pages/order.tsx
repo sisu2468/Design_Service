@@ -92,7 +92,7 @@ export default function OrderForm() {
         };
 
         try {
-            const response = await axios.post('http://sisuworld.life/api/deliver', deliveryData);
+            const response = await axios.post('https://design-service-backend.vercel.app/deliver', deliveryData);
             if (response.status === 200) {
                 navigate('/order');
                 console.log('Success');
