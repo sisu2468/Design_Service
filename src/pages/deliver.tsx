@@ -20,8 +20,8 @@ export default function FlagBuy() {
 
     useEffect(() => {
         const date = new Date()
-        const month = date.getMonth() + 1 // getMonth() returns 0-11, so we add 1
-        const day = date.getDay() + 1 // getMonth() returns 0-11, so we add 1
+        const month = date.getMonth() + 1
+        const day = date.getDay() + 1
         setCurrentMonth((month + 2) % 12)
         if (month == 8 || day == 9 && day <= 15) {
             setDeliverDay('日頃');
