@@ -226,9 +226,9 @@ export default function OrderForm() {
                                         ※印刷工程の仕組み上、表裏で印刷のズレ（3cm未満）や若干の印刷ムラが発生することがございますことご了承ください。
                                     </span>
                                     <div className="flex flex-col">
-                                        <Link to="/images" className="text-blue-500 underline">
+                                        <a href="https://bremen.co.jp/digital_flag/wp-content/uploads/print_zure-scaled.jpeg" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
                                             参考画像を見る
-                                        </Link>
+                                        </a>
                                         <label className="inline-flex items-center cursor-pointer">
                                             <input
                                                 type="checkbox"
@@ -266,7 +266,7 @@ export default function OrderForm() {
                                     理解しました
                                 </p>
                                 <p className='flex items-center flex-wrap text-sm'>
-                                    <span>※万が一印刷不良が発生した場合、再印刷手配となるため、納期がさらに遅れる可能性があります。発注の時期によっては本番に間に合わない可能性もあります。納期には余裕をもってご発注くださいますよう、よろしくお願いいたします。<a href="https://bremen.co.jp/digital_flag/flow/#schedule" className="text-blue-500 underline">納期スケジュールを確認する</a></span>
+                                    <span>※万が一印刷不良が発生した場合、再印刷手配となるため、納期がさらに遅れる可能性があります。発注の時期によっては本番に間に合わない可能性もあります。納期には余裕をもってご発注くださいますよう、よろしくお願いいたします。<a href="https://bremen.co.jp/digital_flag/flow/#schedule" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">納期スケジュールを確認する</a></span>
                                     <label className="inline-flex items-center cursor-pointer">
                                         <input
                                             type="checkbox"
@@ -287,8 +287,6 @@ export default function OrderForm() {
                                     disabled={!isButtonActive}
                                     onClick={sendDeliveryData}
                                 >
-                                    {/* onClick={} */}
-                                    {/* {isButtonActive ? '注文を確定する' :} */}
                                     注文を確定する
                                 </button>
                             </div>

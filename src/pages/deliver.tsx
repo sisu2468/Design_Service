@@ -40,7 +40,12 @@ export default function FlagBuy() {
                             <span className="text-[#FF0000] text-5xl font-bold">{currentMonth}</span> 月
                             {currentDay != 0 && <span className="text-[#FF0000] text-5xl font-bold">{currentDay}</span>}{deliverDay} に発送予定
                         </span>
-                        <span className="text-black font-medium text-base">お届け予定日 (納期)の目安は、<a href="https://bremen.co.jp/digital_flag/flow/#schedule"><span className="text-blue-600">こちらのページ</span></a>をご確認ください。</span>
+                        <span className="text-black font-medium text-base">お届け予定日 (納期)の目安は、
+                            <a href="https://bremen.co.jp/digital_flag/flow/#schedule" target="_blank" rel="noopener noreferrer">
+                                <span className="text-blue-600">こちらのページ</span>
+                            </a>
+                            をご確認ください。
+                        </span>
                     </div>
                     <div className="grid grid-cols-5 items-center text-center px-10">
                         <div className="w-36"></div>
