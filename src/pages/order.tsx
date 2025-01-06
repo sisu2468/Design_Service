@@ -92,9 +92,9 @@ export default function OrderForm() {
         };
 
         try {
-            const response = await axios.post('https://design-service-backend.vercel.app/deliver', deliveryData);
+            const response = await axios.post('http://bremen-flag.com/api/deliver', deliveryData);
             if (response.status === 200) {
-                navigate('/order');
+                navigate('/orderconfirm');
                 console.log('Success');
             } else {
                 console.error('Error:', response.statusText);
