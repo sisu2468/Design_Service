@@ -31,14 +31,40 @@ export default function OrderForm() {
     const [phonenumber, setPhoneNumber] = useState('');
     const [isButtonActive, setIsButtonActive] = useState(false);
     const { goods } = useContext(OrderContext);
+
+    const [shippingName, setShippingName] = useState('');
+    const [shippingPostalNumber, setShippingPostalNumber] = useState('');
+    const [shippingAddress, setShippingAddress] = useState('');
+    const [shippingPhoneNumber, setShippingPhoneNumber] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const navigate = useNavigate();
+    console.log(sameAsCustomer);
 
     useEffect(() => {
+        // Check if all required fields are filled
         const areAllFieldsFilled = [username, emailaddress, address, huriganaName, groupName].every(
             field => field.trim() !== ''
         );
-        setIsButtonActive(confirm1 && confirm2 && confirm3 && confirm4 && confirm5 && areAllFieldsFilled);
-    }, [confirm1, confirm2, confirm3, confirm4, confirm5, username, emailaddress, address, huriganaName, groupName]);
+
+        const areShippingFieldsValid =
+            sameAsCustomer == true ||
+            [shippingName, shippingPostalNumber, shippingAddress, shippingPhoneNumber].every(
+                field => field && field.trim() !== ''
+            );
+
+        // Update button state
+        setIsButtonActive(
+            confirm1 &&
+            confirm2 &&
+            confirm3 &&
+            confirm4 &&
+            confirm5 &&
+            areAllFieldsFilled &&
+            areShippingFieldsValid
+        );
+    }, [confirm1, confirm2, confirm3, confirm4, confirm5, username, emailaddress, address, huriganaName, groupName, sameAsCustomer, shippingName, shippingPostalNumber, shippingAddress, shippingPhoneNumber]);
+
 
     const totalPrice = goods.reduce((sum, good) => {
         const price = MASK_IMAGES[good.index]?.price || 0;
@@ -89,6 +115,14 @@ export default function OrderForm() {
             }))),
             totalprice: totalPrice.toString(),
             deliverydate: `${currentYear}年 ${currentMonth}月 ${currentDay ? currentDay + deliverDay : deliverDay}`,
+            ...(shippingName && shippingPostalNumber && shippingAddress && shippingPhoneNumber && {
+                shippingInfo: {
+                    name: shippingName,
+                    postalNumber: shippingPostalNumber,
+                    address: shippingAddress,
+                    phoneNumber: shippingPhoneNumber,
+                }
+            }),
         };
 
         try {
@@ -102,6 +136,12 @@ export default function OrderForm() {
         } catch (error) {
             console.error('Fetch error:', error);
         }
+    };
+
+    // ... existing useEffect and functions ...
+
+    const handleShippingInfo = () => {
+        setIsModalOpen(!isModalOpen); // Open modal if shipping info is different
     };
 
     return (
@@ -172,13 +212,71 @@ export default function OrderForm() {
                                     <input
                                         type="checkbox"
                                         checked={!sameAsCustomer}
-                                        onChange={() => setSameAsCustomer(!sameAsCustomer)}
+                                        onChange={() => {
+                                            setSameAsCustomer(!sameAsCustomer);
+                                            handleShippingInfo(); // Check if modal should open
+                                        }}
                                         className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out"
                                     />
                                     <span className="text-sm font-bold">発送先情報</span>
                                 </label>
                                 <p className="text-xs mt-1">発送先が購入者と同じ場合は、チェックを入れたままにしてください</p>
                             </div>
+                            {isModalOpen && (
+                                <>
+                                    {/* Modal Overlay */}
+                                    <div
+                                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                                        onClick={() => setIsModalOpen(false)}
+                                    ></div>
+
+                                    {/* Modal Content */}
+                                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                                        <div className="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-md">
+                                            <h2 className="text-lg font-bold mb-4">発送先情報</h2>
+
+                                            <label className="block text-sm font-medium mb-2">お名前</label>
+                                            <input
+                                                type="text"
+                                                className="block w-full border border-gray-300 rounded-lg p-2 mb-4 focus:ring-blue-500 focus:border-blue-500"
+                                                value={shippingName}
+                                                onChange={(e) => setShippingName(e.target.value)}
+                                            />
+
+                                            <label className="block text-sm font-medium mb-2">郵便番号</label>
+                                            <input
+                                                type="text"
+                                                className="block w-full border border-gray-300 rounded-lg p-2 mb-4 focus:ring-blue-500 focus:border-blue-500"
+                                                value={shippingPostalNumber}
+                                                onChange={(e) => setShippingPostalNumber(e.target.value)}
+                                            />
+
+                                            <label className="block text-sm font-medium mb-2">ご住所</label>
+                                            <input
+                                                type="text"
+                                                className="block w-full border border-gray-300 rounded-lg p-2 mb-4 focus:ring-blue-500 focus:border-blue-500"
+                                                value={shippingAddress}
+                                                onChange={(e) => setShippingAddress(e.target.value)}
+                                            />
+
+                                            <label className="block text-sm font-medium mb-2">電話番号</label>
+                                            <input
+                                                type="tel"
+                                                className="block w-full border border-gray-300 rounded-lg p-2 mb-4 focus:ring-blue-500 focus:border-blue-500"
+                                                value={shippingPhoneNumber}
+                                                onChange={(e) => setShippingPhoneNumber(e.target.value)}
+                                            />
+                                            <button
+                                                className="bg-blue-500 text-white rounded-lg px-4 py-2 w-full hover:bg-blue-600"
+                                                onClick={() => setIsModalOpen(false)}
+                                            >
+                                                閉じる
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
                         </div>
                     </div>
 
