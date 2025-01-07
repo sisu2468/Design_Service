@@ -226,13 +226,13 @@ export default function OrderForm() {
                                 <>
                                     {/* Modal Overlay */}
                                     <div
-                                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                                        className=""
                                         onClick={() => setIsModalOpen(false)}
                                     ></div>
 
                                     {/* Modal Content */}
-                                    <div className="fixed inset-0 flex items-center justify-center z-50">
-                                        <div className="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-md">
+                                    <div className="flex items-center">
+                                        <div className="bg-white rounded-lg shadow-lg p-6 w-full">
                                             <h2 className="text-lg font-bold mb-4">発送先情報</h2>
 
                                             <label className="block text-sm font-medium mb-2">お名前</label>
