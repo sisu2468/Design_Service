@@ -39,7 +39,7 @@ export default function OrderForm() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const navigate = useNavigate();
-    console.log(sameAsCustomer);
+    console.log("data", sameAsCustomer, isModalOpen);
 
     useEffect(() => {
         // Check if all required fields are filled
@@ -138,12 +138,6 @@ export default function OrderForm() {
         }
     };
 
-    // ... existing useEffect and functions ...
-
-    const handleShippingInfo = () => {
-        setIsModalOpen(!isModalOpen); // Open modal if shipping info is different
-    };
-
     return (
         <div className="max-w-6xl mx-auto p-8">
             <div className="border border-gray-300 rounded-sm p-6">
@@ -214,7 +208,7 @@ export default function OrderForm() {
                                         checked={!sameAsCustomer}
                                         onChange={() => {
                                             setSameAsCustomer(!sameAsCustomer);
-                                            handleShippingInfo(); // Check if modal should open
+                                            setIsModalOpen(!isModalOpen);
                                         }}
                                         className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out"
                                     />
@@ -224,13 +218,6 @@ export default function OrderForm() {
                             </div>
                             {isModalOpen && (
                                 <>
-                                    {/* Modal Overlay */}
-                                    <div
-                                        className=""
-                                        onClick={() => setIsModalOpen(false)}
-                                    ></div>
-
-                                    {/* Modal Content */}
                                     <div className="flex items-center">
                                         <div className="bg-white rounded-lg shadow-lg p-6 w-full">
                                             <h2 className="text-lg font-bold mb-4">発送先情報</h2>
@@ -268,7 +255,7 @@ export default function OrderForm() {
                                             />
                                             <button
                                                 className="bg-blue-500 text-white rounded-lg px-4 py-2 w-full hover:bg-blue-600"
-                                                onClick={() => setIsModalOpen(false)}
+                                                onClick={() => setIsModalOpen(!isModalOpen)}
                                             >
                                                 閉じる
                                             </button>
