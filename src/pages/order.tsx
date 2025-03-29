@@ -48,7 +48,7 @@ export default function OrderForm() {
         );
 
         const areShippingFieldsValid =
-            sameAsCustomer == true ||
+            sameAsCustomer == false ||
             [shippingName, shippingPostalNumber, shippingAddress, shippingPhoneNumber].every(
                 field => field && field.trim() !== ''
             );
